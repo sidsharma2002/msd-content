@@ -1,0 +1,136 @@
+{
+  "day": 7,
+  "topic": "Feature flags and remote config",
+  "tag": "RELEASES",
+  "script": {
+    "hook": "A bad release is live, and the fix needs a week of app review.",
+    "question": "Design feature flags and remote config.",
+    "trap": "The trap: hardcode a boolean and ship a new build. Users stay on old versions for weeks, and you cannot turn anything off.",
+    "steps": [
+      "Fetch and cache. Fetch config on launch and on foreground, cache it on disk, and ship safe defaults inside the app.",
+      "Stable bucketing. Hash the user id with the flag name, so each person gets the same answer every time.",
+      "Gradual rollout. Go one percent, then ten, then everyone, and watch crashes at every stage.",
+      "Kill switch. Every risky feature gets a flag the server can flip, with a safe fallback if config never arrives."
+    ],
+    "takeaway": "Ship dark, ramp slowly, and always keep a kill switch.",
+    "teaser": "Tomorrow: app startup time.",
+    "cta": "Comment M S D for the free cheatsheet."
+  },
+  "nodes": [
+    {
+      "title": ["Bad release.", "One week fix."], "titleSize": 104,
+      "blocks": [
+        {"type": "panel", "label": "PRODUCTION", "tag": {"text": "CRASH SPIKE", "tone": "red", "cue": "bad release", "sfx": "bell"},
+         "items": [{"type": "rows", "items": [
+           {"icon": "x", "text": "bug is live", "tone": "red", "cue": "live"},
+           {"icon": "clock", "text": "store review: days", "cue": "week"}]}]},
+        {"type": "pills", "items": [{"text": "Design feature flags", "tone": "blue", "size": 42, "cue": "design feature flags"}]}
+      ]
+    },
+    {
+      "title": ["The trap:", "hardcode it"],
+      "blocks": [
+        {"type": "panel", "label": "NAIVE FLAG", "items": [
+          {"type": "code", "parts": [["if (", ""], ["true", "hl"], [") newCheckout()", ""]], "cue": "hardcode a boolean"},
+          {"type": "rows", "items": [
+            {"icon": "x", "text": "needs a new build", "tone": "red", "cue": "new build"},
+            {"icon": "x", "text": "old versions linger", "tone": "red", "cue": "old versions"},
+            {"icon": "x", "text": "cannot turn it off", "tone": "red", "cue": "turn anything off"}]}]},
+        {"type": "pills", "width": 0.55, "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}]}
+      ]
+    },
+    {
+      "title": ["Fetch and", "cache"],
+      "blocks": [
+        {"type": "tiers", "items": [
+          {"name": "SERVER", "main": "fresh config", "cue": "fetch config", "tag": {"text": "on launch", "tone": "blue", "cue": "foreground"}},
+          {"name": "DISK", "main": "cached copy", "cue": "cache it on disk", "tag": {"text": "offline ok", "tone": "green", "cue": "disk"}},
+          {"name": "APP", "main": "safe defaults", "dashed": true, "cue": "safe defaults", "tag": {"text": "last resort", "tone": "amber", "cue": "inside the app"}}]}
+      ]
+    },
+    {
+      "title": ["Stable", "bucketing"], "titleSize": 120,
+      "blocks": [
+        {"type": "panel", "label": "BUCKET", "items": [{"type": "tokens", "lead": "hash(", "items": [{"text": "user id", "cue": "user id"}, {"text": "flag name", "cue": "flag name"}]}]},
+        {"type": "pills", "width": 0.8, "items": [{"text": "same user = same answer", "tone": "green", "size": 40, "cue": "same answer", "sfx": "ding"}]},
+        {"type": "pills", "items": [{"text": "no flicker", "tone": "amber", "cue": "every time"}]}
+      ]
+    },
+    {
+      "title": ["Gradual", "rollout"], "titleSize": 120,
+      "blocks": [
+        {"type": "panel", "label": "ROLLOUT", "items": [{"type": "bars", "items": [
+          {"label": "stage one", "v": 0.1, "tone": "blue", "cue": "one percent", "badge": {"text": "1%", "tone": "blue", "cue": "one percent"}},
+          {"label": "stage two", "v": 0.4, "tone": "blue", "cue": "ten", "badge": {"text": "10%", "tone": "blue", "cue": "ten"}},
+          {"label": "everyone", "v": 0.95, "tone": "ghost", "cue": "everyone", "badge": {"text": "100%", "tone": "green", "cue": "everyone"}}]}]},
+        {"type": "pills", "items": [{"text": "watch crashes", "tone": "red", "cue": "watch crashes"}]}
+      ]
+    },
+    {
+      "title": ["Kill", "switch"], "titleSize": 130,
+      "blocks": [
+        {"type": "rows", "items": [
+          {"icon": "x", "text": "server flips it off", "tone": "red", "cue": "server can flip", "tag": {"text": "instant", "tone": "red", "cue": "flip", "sfx": "bell"}},
+          {"icon": "ok", "text": "safe fallback", "cue": "safe fallback"},
+          {"icon": "clock", "text": "config never arrives", "cue": "never arrives"}]}
+      ]
+    },
+    {
+      "title": ["Ship dark.", "Ramp slowly.", "Kill switch."], "titleSize": 96,
+      "blocks": [
+        {"type": "rows", "h": 112, "items": [
+          {"icon": "ok", "text": "Ship dark", "sub": "flag off by default", "cue": "ship dark"},
+          {"icon": "ok", "text": "Ramp slowly", "sub": "one, ten, all", "cue": "ramp slowly"},
+          {"icon": "ok", "text": "Kill switch", "sub": "always", "cue": "kill switch"}]}
+      ]
+    },
+    {
+      "title": ["Next: App", "startup time"],
+      "blocks": [
+        {"type": "rows", "items": [
+          {"text": "Cold start", "cue": "app", "dt": 0.3},
+          {"text": "Lazy init", "cue": "startup", "dt": 0.3},
+          {"text": "Baseline profiles", "cue": "time", "dt": 0.3}]},
+        {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+        {"type": "pills", "h": 56, "items": [{"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"}, {"text": "Day 8: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}]}
+      ]
+    }
+  ],
+  "flow": {
+    "title": "Flags, end to end", "tag": "#07 FLAGS",
+    "boxes": [
+      {"id": "app", "x": 80, "y": 300, "w": 300, "h": 200, "title": "APP", "sub": "reads flag"},
+      {"id": "cache", "x": 510, "y": 300, "w": 340, "h": 160, "title": "Disk cache", "sub": "last good config"},
+      {"id": "srv", "x": 1000, "y": 300, "w": 340, "h": 160, "title": "Config server", "sub": "rules + percent"},
+      {"id": "buck", "x": 510, "y": 590, "w": 340, "h": 160, "title": "Bucketing", "sub": "hash(user, flag)", "tone": "blue"},
+      {"id": "def", "x": 1000, "y": 620, "w": 340, "h": 160, "title": "Defaults", "titleSize": 44, "sub": "shipped in app", "dashed": true}
+    ],
+    "arrows": [
+      {"from": "app", "fromSide": "r", "to": "cache", "toSide": "l", "at": 0.9, "label": {"text": "read", "x": 388, "y": 344, "w": 100}},
+      {"from": "srv", "fromSide": "l", "to": "cache", "toSide": "r", "at": 2.6, "tone": "green", "label": {"text": "fetch", "x": 860, "y": 344, "w": 130}},
+      {"from": "cache", "fromSide": "b", "to": "buck", "toSide": "t", "at": 5.0, "dur": 0.5},
+      {"from": "buck", "fromSide": "r", "to": "def", "toSide": "l", "at": 6.4, "dashed": true, "label": {"text": "no config", "x": 860, "y": 640, "w": 130}},
+      {"pts": [[1170, 460], [1170, 540], [230, 540], [230, 504]], "dir": "u", "at": 8.8, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "kill switch: off", "x": 700, "y": 548, "w": 280}}
+    ],
+    "chips": [
+      {"text": "1% then 10% then all", "x": 1000, "y": 490, "w": 340, "tone": "green", "at": 7.0},
+      {"text": "same user, same bucket", "x": 560, "y": 776, "w": 300, "tone": "green", "at": 5.8},
+      {"text": "crash spike: roll back", "x": 560, "y": 828, "w": 300, "tone": "redsoft", "at": 9.6}
+    ],
+    "steps": [
+      {"text": "Fetch + cache", "at": 0.7}, {"text": "Stable bucket", "at": 4.8}, {"text": "Gradual rollout", "at": 6.8}, {"text": "Kill switch", "at": 8.4}
+    ]
+  },
+  "cover": {
+    "lines": ["Design", "feature", "flags."],
+    "card": {"type": "panel", "label": "ROLLOUT", "tag": {"text": "KILL SWITCH", "tone": "red"},
+             "items": [{"type": "bars", "h": 260, "items": [
+               {"label": "1%", "v": 0.1, "tone": "blue"}, {"label": "10%", "v": 0.4, "tone": "blue"}, {"label": "100%", "v": 0.95, "tone": "ghost"}]}]}
+  },
+  "social": {
+    "insta_cta": "Comment MSD for the free cheatsheet.",
+    "linkedin_cta": "Question for you: when a flag is stale in code, who removes it and when? Tell me your process.",
+    "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #softwareengineer #featureflags #interviewprep #remoteconfig",
+    "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #FeatureFlags #SoftwareEngineering #TechInterviews"
+  }
+}
