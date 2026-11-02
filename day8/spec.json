@@ -1,0 +1,593 @@
+{
+ "day": 8,
+ "topic": "App startup time",
+ "tag": "MOBILE-PERF",
+ "script": {
+  "hook": "Users tap your icon and stare at a blank splash for four seconds.",
+  "question": "Design a fast app startup.",
+  "trap": "The trap: initialize every SDK at launch. Analytics, ads and crash tools block the first frame, so the app feels dead.",
+  "steps": [
+   "Measure cold start. Process start to first frame, on a mid range device, as a percentile.",
+   "Defer the work. Only the first screen is allowed on the critical path. Lazy init the rest, after the first frame or on a background thread.",
+   "Cheap first frame. Show a cached layout right away, skip heavy inflation, load fresh data after.",
+   "Precompile the hot path. Baseline profiles on Android skip slow first run code. On iOS, cut dynamic frameworks and static initializers."
+  ],
+  "takeaway": "Do less before the first frame, and measure it every release.",
+  "teaser": "Tomorrow: deep links.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Four second",
+    "splash."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "APP LAUNCH",
+     "tag": {
+      "text": "4.0 SECONDS",
+      "tone": "red",
+      "cue": "four seconds",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "blank splash",
+         "tone": "red",
+         "cue": "blank splash"
+        },
+        {
+         "icon": "clock",
+         "text": "user waits",
+         "cue": "stare"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design fast startup",
+       "tone": "blue",
+       "size": 42,
+       "cue": "fast app startup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "init it all"
+   ],
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE LAUNCH",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "onCreate { ",
+         ""
+        ],
+        [
+         "initAllSdks()",
+         "hl"
+        ],
+        [
+         " }",
+         ""
+        ]
+       ],
+       "cue": "initialize every sdk"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "analytics blocks",
+         "tone": "red",
+         "cue": "analytics"
+        },
+        {
+         "icon": "x",
+         "text": "ads and crash tools",
+         "tone": "red",
+         "cue": "crash tools"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Measure",
+    "cold start"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "COLD START",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "from",
+       "items": [
+        {
+         "text": "start",
+         "cue": "process start"
+        },
+        {
+         "text": "first frame",
+         "cue": "first frame"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.8,
+     "items": [
+      {
+       "text": "mid range device",
+       "tone": "amber",
+       "size": 40,
+       "cue": "mid range"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "track the p90",
+       "tone": "green",
+       "cue": "percentile"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Defer the",
+    "work"
+   ],
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "CRITICAL PATH",
+       "main": "first screen only",
+       "cue": "first screen",
+       "tag": {
+        "text": "must run",
+        "tone": "red",
+        "cue": "critical path"
+       }
+      },
+      {
+       "name": "AFTER FRAME",
+       "main": "analytics, ads",
+       "cue": "lazy init",
+       "tag": {
+        "text": "lazy",
+        "tone": "blue",
+        "cue": "after the first frame"
+       }
+      },
+      {
+       "name": "BACKGROUND",
+       "main": "heavy init",
+       "dashed": true,
+       "cue": "background thread",
+       "tag": {
+        "text": "off main",
+        "tone": "green",
+        "cue": "thread"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Cheap",
+    "first frame"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "FIRST FRAME",
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "ok",
+         "text": "cached layout",
+         "cue": "cached layout"
+        },
+        {
+         "icon": "x",
+         "text": "heavy inflation",
+         "tone": "red",
+         "cue": "heavy inflation"
+        },
+        {
+         "icon": "clock",
+         "text": "fresh data after",
+         "cue": "fresh data"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Precompile",
+    "hot path"
+   ],
+   "titleSize": 112,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Android: baseline profile",
+       "cue": "baseline profiles",
+       "size": 40
+      },
+      {
+       "icon": "ok",
+       "text": "iOS: fewer frameworks",
+       "cue": "dynamic frameworks",
+       "size": 40
+      },
+      {
+       "icon": "x",
+       "text": "static initializers",
+       "tone": "red",
+       "cue": "static initializers"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Do less.",
+    "Measure it."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Do less",
+       "sub": "before first frame",
+       "cue": "do less"
+      },
+      {
+       "icon": "ok",
+       "text": "Measure it",
+       "sub": "every release",
+       "cue": "measure it"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: Deep",
+    "links"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Universal links",
+       "cue": "tomorrow",
+       "dt": 0.2
+      },
+      {
+       "text": "Deferred deep links",
+       "cue": "deep",
+       "dt": 0.2
+      },
+      {
+       "text": "Fallbacks",
+       "cue": "links",
+       "dt": 0.2
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 9: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Startup, end to end",
+  "tag": "#08 STARTUP",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 200,
+    "title": "LAUNCH",
+    "sub": "process start"
+   },
+   {
+    "id": "crit",
+    "x": 510,
+    "y": 300,
+    "w": 340,
+    "h": 160,
+    "title": "Critical path",
+    "sub": "first screen only"
+   },
+   {
+    "id": "frame",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 160,
+    "title": "First frame",
+    "sub": "cached layout"
+   },
+   {
+    "id": "lazy",
+    "x": 510,
+    "y": 590,
+    "w": 340,
+    "h": 160,
+    "title": "Lazy init",
+    "sub": "after first frame",
+    "tone": "blue"
+   },
+   {
+    "id": "bg",
+    "x": 1000,
+    "y": 620,
+    "w": 340,
+    "h": 160,
+    "title": "Background",
+    "titleSize": 44,
+    "sub": "heavy SDKs",
+    "dashed": true
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "crit",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "start",
+     "x": 388,
+     "y": 344,
+     "w": 100
+    }
+   },
+   {
+    "from": "crit",
+    "fromSide": "r",
+    "to": "frame",
+    "toSide": "l",
+    "at": 2.6,
+    "tone": "green",
+    "label": {
+     "text": "draw",
+     "x": 860,
+     "y": 344,
+     "w": 130
+    }
+   },
+   {
+    "from": "crit",
+    "fromSide": "b",
+    "to": "lazy",
+    "toSide": "t",
+    "at": 5.0,
+    "dur": 0.5
+   },
+   {
+    "from": "lazy",
+    "fromSide": "r",
+    "to": "bg",
+    "toSide": "l",
+    "at": 6.4,
+    "dashed": true,
+    "label": {
+     "text": "heavy",
+     "x": 860,
+     "y": 640,
+     "w": 130
+    }
+   },
+   {
+    "pts": [
+     [
+      1170,
+      460
+     ],
+     [
+      1170,
+      540
+     ],
+     [
+      230,
+      540
+     ],
+     [
+      230,
+      504
+     ]
+    ],
+    "dir": "u",
+    "at": 8.8,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "p90 regressed: block",
+     "x": 700,
+     "y": 548,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "fast first frame",
+    "x": 1000,
+    "y": 490,
+    "w": 340,
+    "tone": "green",
+    "at": 7.0
+   },
+   {
+    "text": "off the critical path",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "green",
+    "at": 5.8
+   },
+   {
+    "text": "measure every release",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 9.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Measure",
+    "at": 0.7
+   },
+   {
+    "text": "Defer work",
+    "at": 4.8
+   },
+   {
+    "text": "Cheap frame",
+    "at": 6.8
+   },
+   {
+    "text": "Precompile",
+    "at": 8.4
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Fast",
+   "app",
+   "startup."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "COLD START",
+   "tag": {
+    "text": "4.0 SECONDS",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "bars",
+     "h": 260,
+     "items": [
+      {
+       "label": "before",
+       "v": 0.9,
+       "tone": "red"
+      },
+      {
+       "label": "after",
+       "v": 0.3,
+       "tone": "blue"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the heaviest thing you ever moved off your startup path? Tell me what it was.",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #softwareengineer #appperformance #interviewprep #appstartup",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #AppPerformance #SoftwareEngineering #TechInterviews"
+ }
+}
