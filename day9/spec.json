@@ -1,0 +1,603 @@
+{
+ "day": 9,
+ "topic": "Deep links",
+ "tag": "MOBILE-PERF",
+ "script": {
+  "hook": "A user taps your link and lands on the home screen, not the product.",
+  "question": "Design deep links for a mobile app.",
+  "trap": "The trap: a custom URL scheme. Any app can claim it, and if your app is missing, the link just dies.",
+  "steps": [
+   "Use verified links. Universal links on iOS and app links on Android, backed by a file on your own domain.",
+   "Route in one place. Parse the url into a typed destination, check login, then navigate.",
+   "Handle not installed. Send them to the store, then a deferred deep link restores the destination after first open.",
+   "Always fall back. Unknown or old links open the web page or home, never a blank error."
+  ],
+  "takeaway": "Own the domain, route in one place, and always have a fallback.",
+  "teaser": "Tomorrow: push notifications.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Wrong",
+    "screen."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "LINK TAP",
+     "tag": {
+      "text": "HOME SCREEN",
+      "tone": "red",
+      "cue": "home screen",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "lands on home",
+         "tone": "red",
+         "cue": "lands on the home screen"
+        },
+        {
+         "icon": "clock",
+         "text": "user gives up",
+         "cue": "not the product"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design deep links",
+       "tone": "blue",
+       "size": 42,
+       "cue": "deep links"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "custom scheme"
+   ],
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE LINK",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "myapp://",
+         "hl"
+        ],
+        [
+         "product/42",
+         ""
+        ]
+       ],
+       "cue": "custom url scheme"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "any app claims it",
+         "tone": "red",
+         "cue": "any app can claim it"
+        },
+        {
+         "icon": "x",
+         "text": "not installed: dead",
+         "tone": "red",
+         "cue": "just dies"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ],
+   "titleSize": 90
+  },
+  {
+   "title": [
+    "Verified",
+    "links"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "YOUR DOMAIN",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "on",
+       "items": [
+        {
+         "text": "domain",
+         "cue": "own domain"
+        },
+        {
+         "text": "app proves",
+         "cue": "app links"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.8,
+     "items": [
+      {
+       "text": "iOS: universal links",
+       "tone": "amber",
+       "size": 40,
+       "cue": "universal links"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Android: app links",
+       "tone": "green",
+       "cue": "app links"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Route in",
+    "one place"
+   ],
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "PARSE",
+       "main": "url to destination",
+       "cue": "parse the url",
+       "tag": {
+        "text": "typed",
+        "tone": "blue",
+        "cue": "typed destination"
+       }
+      },
+      {
+       "name": "CHECK",
+       "main": "is user logged in",
+       "cue": "check login",
+       "tag": {
+        "text": "gate",
+        "tone": "red",
+        "cue": "login"
+       }
+      },
+      {
+       "name": "NAVIGATE",
+       "main": "open the screen",
+       "dashed": true,
+       "cue": "then navigate",
+       "tag": {
+        "text": "go",
+        "tone": "green",
+        "cue": "navigate"
+       }
+      }
+     ]
+    }
+   ],
+   "titleSize": 112
+  },
+  {
+   "title": [
+    "Not",
+    "installed"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NO APP YET",
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "clock",
+         "text": "open the store",
+         "cue": "send them to the store"
+        },
+        {
+         "icon": "ok",
+         "text": "deferred deep link",
+         "cue": "deferred deep link"
+        },
+        {
+         "icon": "ok",
+         "text": "restore after open",
+         "cue": "after first open"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Always",
+    "fall back"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "open the web page",
+       "cue": "web page",
+       "size": 40
+      },
+      {
+       "icon": "ok",
+       "text": "or go to home",
+       "cue": "or home",
+       "size": 40
+      },
+      {
+       "icon": "x",
+       "text": "blank error",
+       "tone": "red",
+       "cue": "blank error"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Own the",
+    "domain."
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Own the domain",
+       "sub": "verified links",
+       "cue": "own the domain"
+      },
+      {
+       "icon": "ok",
+       "text": "Route once",
+       "sub": "one router",
+       "cue": "route in one place"
+      },
+      {
+       "icon": "ok",
+       "text": "Fall back",
+       "sub": "never a dead end",
+       "cue": "always have a fallback"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: Push",
+    "notifications"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Token registration",
+       "cue": "tomorrow",
+       "dt": 0.2
+      },
+      {
+       "text": "Delivery",
+       "cue": "push",
+       "dt": 0.2
+      },
+      {
+       "text": "Opt in rate",
+       "cue": "notifications",
+       "dt": 0.2
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 10: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ],
+   "titleSize": 90
+  }
+ ],
+ "flow": {
+  "title": "Deep link, end to end",
+  "tag": "#09 DEEP LINKS",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 200,
+    "title": "TAP LINK",
+    "sub": "https url"
+   },
+   {
+    "id": "crit",
+    "x": 510,
+    "y": 300,
+    "w": 340,
+    "h": 160,
+    "title": "OS verifies",
+    "sub": "domain file"
+   },
+   {
+    "id": "frame",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 160,
+    "title": "Router",
+    "sub": "one place"
+   },
+   {
+    "id": "lazy",
+    "x": 510,
+    "y": 590,
+    "w": 340,
+    "h": 160,
+    "title": "Store",
+    "sub": "app not installed",
+    "tone": "blue"
+   },
+   {
+    "id": "bg",
+    "x": 1000,
+    "y": 620,
+    "w": 340,
+    "h": 160,
+    "title": "Deferred link",
+    "titleSize": 40,
+    "sub": "restore after open",
+    "dashed": true
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "crit",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "tap",
+     "x": 388,
+     "y": 344,
+     "w": 100
+    }
+   },
+   {
+    "from": "crit",
+    "fromSide": "r",
+    "to": "frame",
+    "toSide": "l",
+    "at": 2.6,
+    "tone": "green",
+    "label": {
+     "text": "open",
+     "x": 860,
+     "y": 344,
+     "w": 130
+    }
+   },
+   {
+    "from": "crit",
+    "fromSide": "b",
+    "to": "lazy",
+    "toSide": "t",
+    "at": 5.0,
+    "dur": 0.5,
+    "label": {
+     "text": "no app",
+     "x": 700,
+     "y": 500,
+     "w": 140
+    }
+   },
+   {
+    "from": "lazy",
+    "fromSide": "r",
+    "to": "bg",
+    "toSide": "l",
+    "at": 6.4,
+    "dashed": true,
+    "label": {
+     "text": "install",
+     "x": 860,
+     "y": 640,
+     "w": 130
+    }
+   },
+   {
+    "pts": [
+     [
+      1170,
+      460
+     ],
+     [
+      1170,
+      540
+     ],
+     [
+      230,
+      540
+     ],
+     [
+      230,
+      504
+     ]
+    ],
+    "dir": "u",
+    "at": 8.8,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "unknown: fallback",
+     "x": 700,
+     "y": 548,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "right screen",
+    "x": 1000,
+    "y": 490,
+    "w": 340,
+    "tone": "green",
+    "at": 7.0
+   },
+   {
+    "text": "first open restores",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "green",
+    "at": 5.8
+   },
+   {
+    "text": "never a dead end",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 9.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Verified",
+    "at": 0.7
+   },
+   {
+    "text": "One router",
+    "at": 4.8
+   },
+   {
+    "text": "Deferred",
+    "at": 6.8
+   },
+   {
+    "text": "Fallback",
+    "at": 8.4
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Deep",
+   "links",
+   "explained."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "LINK TAP",
+   "tag": {
+    "text": "WRONG SCREEN",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "bars",
+     "h": 260,
+     "items": [
+      {
+       "label": "scheme",
+       "v": 0.9,
+       "tone": "red"
+      },
+      {
+       "label": "verified",
+       "v": 0.3,
+       "tone": "blue"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the worst deep link bug you have shipped? Tell me what broke.",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #softwareengineer #deeplinks #interviewprep #appdesign",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #DeepLinks #SoftwareEngineering #TechInterviews"
+ }
+}
