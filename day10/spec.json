@@ -1,0 +1,238 @@
+{
+ "day": 10,
+ "topic": "Push notifications",
+ "tag": "MOBILE-PERF",
+ "script": {
+  "hook": "Your push went out, and half the users never saw it.",
+  "question": "Design push notifications for a mobile app.",
+  "trap": "The trap: treat a push like a guaranteed message. Tokens go stale, delivery is best effort, and big payloads get dropped.",
+  "steps": [
+   "Register the token. Ask permission at a good moment, then send the device token to your server whenever it changes.",
+   "Send through the platform. Your server calls APNs or FCM, which hold the message until the device is reachable.",
+   "Keep the payload tiny. Send an id and a short text, then fetch the full content when the app wakes.",
+   "Handle taps and cleanup. Route the tap with your deep link router, and delete tokens the platform reports as invalid."
+  ],
+  "takeaway": "Tokens expire and delivery is best effort, so keep payloads tiny and clean up dead tokens.",
+  "teaser": "Tomorrow: analytics events.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": ["Push never", "arrived."],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "PUSH SENT",
+     "tag": {"text": "NOT SEEN", "tone": "red", "cue": "never saw it", "sfx": "bell"},
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {"icon": "ok", "text": "server says sent", "cue": "went out"},
+        {"icon": "x", "text": "user saw nothing", "tone": "red", "cue": "half the users"}
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [{"text": "Design push", "tone": "blue", "size": 42, "cue": "push notifications"}]
+    }
+   ]
+  },
+  {
+   "title": ["The trap:", "guaranteed"],
+   "titleSize": 90,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE PUSH",
+     "items": [
+      {
+       "type": "code",
+       "parts": [["send(", ""], ["token", "hl"], [")", ""]],
+       "cue": "guaranteed message"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {"icon": "x", "text": "tokens go stale", "tone": "red", "cue": "tokens go stale"},
+        {"icon": "x", "text": "big payload dropped", "tone": "red", "cue": "big payloads get dropped"}
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}]
+    }
+   ]
+  },
+  {
+   "title": ["Register", "the token"],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "DEVICE TOKEN",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "send",
+       "items": [
+        {"text": "token", "cue": "device token"},
+        {"text": "on change", "cue": "whenever it changes"}
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.8,
+     "items": [{"text": "ask at a good moment", "tone": "amber", "size": 38, "cue": "ask permission"}]
+    }
+   ]
+  },
+  {
+   "title": ["Send via", "platform"],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {"name": "YOUR SERVER", "main": "calls the API", "cue": "your server calls", "tag": {"text": "send", "tone": "blue", "cue": "calls"}},
+      {"name": "APNS / FCM", "main": "holds the message", "cue": "hold the message", "tag": {"text": "queue", "tone": "red", "cue": "hold"}},
+      {"name": "DEVICE", "main": "delivers later", "dashed": true, "cue": "reachable", "tag": {"text": "go", "tone": "green", "cue": "reachable"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": ["Tiny", "payload"],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "PAYLOAD",
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {"icon": "ok", "text": "id and short text", "cue": "an id and a short text"},
+        {"icon": "ok", "text": "fetch on wake", "cue": "fetch the full content"},
+        {"icon": "x", "text": "full content inside", "tone": "red", "cue": "when the app wakes"}
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": ["Taps and", "cleanup"],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {"icon": "ok", "text": "tap to deep link", "cue": "deep link router", "size": 40},
+      {"icon": "ok", "text": "delete dead tokens", "cue": "delete tokens", "size": 40},
+      {"icon": "x", "text": "keep invalid tokens", "tone": "red", "cue": "invalid"}
+     ]
+    }
+   ]
+  },
+  {
+   "title": ["Tokens", "expire."],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {"icon": "ok", "text": "Best effort", "sub": "not guaranteed", "cue": "best effort"},
+      {"icon": "ok", "text": "Tiny payload", "sub": "fetch the rest", "cue": "tiny"},
+      {"icon": "ok", "text": "Clean up", "sub": "drop dead tokens", "cue": "clean up dead tokens"}
+     ]
+    }
+   ]
+  },
+  {
+   "title": ["Next: Analytics", "events"],
+   "titleSize": 80,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {"text": "Batching", "cue": "tomorrow", "dt": 0.2},
+      {"text": "Offline queue", "cue": "analytics", "dt": 0.2},
+      {"text": "Sampling", "cue": "events", "dt": 0.2}
+     ]
+    },
+    {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"},
+      {"text": "Day 11: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Push, end to end",
+  "tag": "#10 PUSH",
+  "boxes": [
+   {"id": "app", "x": 80, "y": 300, "w": 300, "h": 200, "title": "APP", "sub": "registers token"},
+   {"id": "crit", "x": 510, "y": 300, "w": 340, "h": 160, "title": "Your server", "sub": "stores token"},
+   {"id": "frame", "x": 1000, "y": 300, "w": 340, "h": 160, "title": "APNs / FCM", "sub": "holds message"},
+   {"id": "lazy", "x": 510, "y": 590, "w": 340, "h": 160, "title": "Device", "sub": "tiny payload", "tone": "blue"},
+   {"id": "bg", "x": 1000, "y": 620, "w": 340, "h": 160, "title": "Fetch content", "titleSize": 40, "sub": "on wake", "dashed": true}
+  ],
+  "arrows": [
+   {"from": "app", "fromSide": "r", "to": "crit", "toSide": "l", "at": 0.9, "label": {"text": "token", "x": 388, "y": 344, "w": 100}},
+   {"from": "crit", "fromSide": "r", "to": "frame", "toSide": "l", "at": 2.6, "tone": "green", "label": {"text": "send", "x": 860, "y": 344, "w": 130}},
+   {"from": "frame", "fromSide": "b", "to": "bg", "toSide": "t", "at": 5.0, "dur": 0.5},
+   {"from": "bg", "fromSide": "l", "to": "lazy", "toSide": "r", "at": 6.4, "dashed": true, "label": {"text": "deliver", "x": 860, "y": 640, "w": 130}},
+   {"pts": [[1170, 460], [1170, 540], [230, 540], [230, 504]], "dir": "u", "at": 8.8, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "invalid token: delete", "x": 640, "y": 548, "w": 340}}
+  ],
+  "chips": [
+   {"text": "right screen on tap", "x": 1000, "y": 490, "w": 340, "tone": "green", "at": 7.0},
+   {"text": "fetch the rest", "x": 560, "y": 776, "w": 300, "tone": "green", "at": 5.8},
+   {"text": "no dead tokens", "x": 560, "y": 828, "w": 300, "tone": "redsoft", "at": 9.6}
+  ],
+  "steps": [
+   {"text": "Register", "at": 0.7},
+   {"text": "Via platform", "at": 2.4},
+   {"text": "Tiny payload", "at": 6.2},
+   {"text": "Cleanup", "at": 8.4}
+  ]
+ },
+ "cover": {
+  "lines": ["Push", "alerts", "explained."],
+  "card": {
+   "type": "panel",
+   "label": "PUSH SENT",
+   "tag": {"text": "NOT SEEN", "tone": "red"},
+   "items": [
+    {
+     "type": "bars",
+     "h": 260,
+     "items": [
+      {"label": "sent", "v": 0.9, "tone": "blue"},
+      {"label": "seen", "v": 0.4, "tone": "red"}
+     ]
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the most confusing push notification bug you have chased? Tell me what broke.",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #softwareengineer #pushnotifications #interviewprep #appdesign",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #PushNotifications #SoftwareEngineering #TechInterviews"
+}
+}
