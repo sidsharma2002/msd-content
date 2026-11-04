@@ -1,0 +1,647 @@
+{
+ "day": 12,
+ "topic": "Typing indicators and presence",
+ "tag": "CHAT",
+ "script": {
+  "hook": "The typing indicator never goes away. Interviewers love this bug.",
+  "question": "Design typing indicators and presence for a chat app.",
+  "trap": "The trap: send an event on every keystroke. That floods the server, and one lost stop leaves typing stuck forever.",
+  "steps": [
+   "Throttle sends. Send typing once every three seconds while the user types. Send stop on send.",
+   "Expire on receive. Show typing for five seconds, then hide it. A lost stop heals itself.",
+   "Heartbeat presence. Ping every thirty seconds in the foreground. Sixty seconds of silence means offline.",
+   "Scope the fan out. Send presence only to open chats and close contacts. Subscribe when a screen opens."
+  ],
+  "takeaway": "Throttle the sender, expire on the receiver, heartbeat for presence.",
+  "teaser": "Tomorrow: read receipts and delivery status.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Typing...",
+    "forever."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT THREAD",
+     "tag": {
+      "text": "STUCK",
+      "tone": "red",
+      "cue": "this bug",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "ok",
+         "text": "see you at six",
+         "cue": "never goes away",
+         "dt": -1.5
+        },
+        {
+         "icon": "clock",
+         "text": "Alex is typing...",
+         "tone": "amber",
+         "cue": "never goes away"
+        },
+        {
+         "icon": "x",
+         "text": "last seen: unknown",
+         "tone": "red",
+         "cue": "this bug"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design typing and presence",
+       "tone": "blue",
+       "size": 38,
+       "cue": "design typing indicators"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "every keystroke"
+   ],
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE TYPING",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "onKey { send(",
+         ""
+        ],
+        [
+         "typing",
+         "hl"
+        ],
+        [
+         ") }",
+         ""
+        ]
+       ],
+       "cue": "event on every keystroke"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "floods the server",
+         "tone": "red",
+         "cue": "floods the server"
+        },
+        {
+         "icon": "x",
+         "text": "lost stop = stuck",
+         "tone": "red",
+         "cue": "stuck forever"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Throttle",
+    "sends"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "SENDER",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "typing",
+       "items": [
+        {
+         "text": "max 1 per 3s",
+         "cue": "once every three seconds"
+        },
+        {
+         "text": "stop",
+         "cue": "send stop"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "cells",
+     "items": [
+      {
+       "text": "key",
+       "cue": "while the user types"
+      },
+      {
+       "text": "key",
+       "cue": "while the user types",
+       "dt": 0.3
+      },
+      {
+       "text": "1 event",
+       "cue": "once every three seconds"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.78,
+     "items": [
+      {
+       "text": "stop on send or idle",
+       "tone": "green",
+       "size": 40,
+       "cue": "send stop",
+       "sfx": "ding"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Expire",
+    "on receive"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "typing event",
+       "cue": "show typing"
+      },
+      {
+       "icon": "clock",
+       "text": "show for 5s",
+       "tone": "amber",
+       "cue": "five seconds"
+      },
+      {
+       "icon": "ok",
+       "text": "hide the dots",
+       "cue": "then hide it"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "lost stop heals itself",
+       "tone": "green",
+       "size": 38,
+       "cue": "heals itself",
+       "sfx": "ding"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Heartbeat",
+    "presence"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "ping 30s",
+       "tone": "blue",
+       "cue": "every thirty seconds"
+      },
+      {
+       "text": "silent 60s",
+       "tone": "red",
+       "cue": "sixty seconds"
+      },
+      {
+       "text": "offline",
+       "tone": "ink",
+       "cue": "means offline"
+      }
+     ]
+    },
+    {
+     "type": "panel",
+     "label": "HEARTBEAT",
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "30s",
+         "cue": "every thirty seconds"
+        },
+        {
+         "text": "60s",
+         "cue": "sixty seconds"
+        },
+        {
+         "text": "gone",
+         "cue": "means offline"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.6,
+     "items": [
+      {
+       "text": "foreground only",
+       "tone": "green",
+       "size": 40,
+       "cue": "in the foreground"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Scope the",
+    "fan out"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "open chats",
+       "cue": "open chats"
+      },
+      {
+       "icon": "ok",
+       "text": "close contacts",
+       "cue": "close contacts"
+      },
+      {
+       "icon": "x",
+       "text": "not everyone",
+       "tone": "red",
+       "cue": "subscribe"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "subscribe on screen open",
+       "tone": "blue",
+       "size": 36,
+       "cue": "when a screen opens"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Throttle.",
+    "Expire.",
+    "Heartbeat."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Sender",
+       "sub": "throttle",
+       "cue": "throttle the sender"
+      },
+      {
+       "icon": "ok",
+       "text": "Receiver",
+       "sub": "expire",
+       "cue": "expire on the receiver"
+      },
+      {
+       "icon": "ok",
+       "text": "Presence",
+       "sub": "heartbeat",
+       "cue": "heartbeat for presence"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: Read",
+    "receipts"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Sent",
+       "cue": "read receipts",
+       "dt": 0.3
+      },
+      {
+       "text": "Delivered",
+       "cue": "delivery",
+       "dt": 0.3
+      },
+      {
+       "text": "Read",
+       "cue": "status",
+       "dt": 0.3
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 13: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Typing and presence path",
+  "tag": "#12 CHAT",
+  "boxes": [
+   {
+    "id": "snd",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 220,
+    "title": "TYPER",
+    "sub": "throttle 1 per 3s"
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Chat server",
+    "titleSize": 36,
+    "sub": "relay, no storage",
+    "chip": {
+     "text": "ephemeral",
+     "at": 1.8
+    }
+   },
+   {
+    "id": "prs",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Presence",
+    "titleSize": 40,
+    "sub": "last ping time"
+   },
+   {
+    "id": "rcv",
+    "x": 1000,
+    "y": 540,
+    "w": 340,
+    "h": 160,
+    "title": "VIEWER",
+    "titleSize": 44,
+    "sub": "hide after 5s",
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "snd",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "typing",
+     "x": 388,
+     "y": 330,
+     "w": 100
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "prs",
+    "toSide": "l",
+    "at": 3.0,
+    "mid": 905,
+    "label": {
+     "text": "ping 30s",
+     "x": 905,
+     "y": 290,
+     "w": 90
+    }
+   },
+   {
+    "from": "prs",
+    "fromSide": "b",
+    "to": "rcv",
+    "toSide": "t",
+    "at": 4.6,
+    "dur": 0.5,
+    "label": {
+     "text": "online",
+     "x": 1182,
+     "y": 440,
+     "w": 80
+    }
+   },
+   {
+    "pts": [
+     [
+      510,
+      450
+     ],
+     [
+      380,
+      450
+     ]
+    ],
+    "dir": "l",
+    "at": 6.0,
+    "dur": 0.5,
+    "tone": "green",
+    "label": {
+     "text": "stop",
+     "x": 400,
+     "y": 456,
+     "w": 90
+    }
+   },
+   {
+    "pts": [
+     [
+      1000,
+      640
+     ],
+     [
+      680,
+      640
+     ],
+     [
+      680,
+      484
+     ]
+    ],
+    "dir": "u",
+    "at": 8.4,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "no ping 60s: offline",
+     "x": 700,
+     "y": 650,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "lost stop heals",
+    "x": 80,
+    "y": 560,
+    "w": 300,
+    "tone": "green",
+    "at": 2.4
+   },
+   {
+    "text": "open chats only",
+    "x": 1000,
+    "y": 740,
+    "w": 340,
+    "tone": "redsoft",
+    "at": 5.4
+   }
+  ],
+  "steps": [
+   {
+    "text": "Throttled typing",
+    "at": 0.7
+   },
+   {
+    "text": "Relay, expire",
+    "at": 2.9
+   },
+   {
+    "text": "Heartbeat",
+    "at": 4.5
+   },
+   {
+    "text": "Offline after 60s",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Typing",
+   "and",
+   "presence."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT THREAD",
+   "tag": {
+    "text": "STUCK",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "see you at six"
+      },
+      {
+       "icon": "clock",
+       "text": "Alex is typing...",
+       "tone": "amber"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the strangest presence or typing indicator bug you have debugged in a chat app?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #presence #heartbeat #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #ChatSystems #SoftwareEngineering #TechInterviews"
+ }
+}
