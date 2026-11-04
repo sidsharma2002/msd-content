@@ -1,0 +1,133 @@
+{
+  "day": 11,
+  "topic": "Message delivery and ordering",
+  "tag": "CHAT",
+  "script": {
+    "hook": "Messages show up twice, or out of order. Interviewers love this chat bug.",
+    "question": "Design message delivery and ordering for a chat app.",
+    "trap": "The trap: send over a socket and append whatever arrives. Retries create duplicates, and the network reorders messages.",
+    "steps": [
+      "Client ID. Give every message a client generated ID before sending. The server dedupes on it, so a retry is safe.",
+      "Server order. The server assigns a sequence number per conversation. Clients sort by it, never by the device clock.",
+      "Acks and retries. Track sent, delivered, and read states. Retry with backoff until the server acks.",
+      "Gap repair. If sequence five follows three, ask for four. On reconnect, sync from the last seen sequence."
+    ],
+    "takeaway": "Client ID for dedupe, server sequence for order, and ack everything.",
+    "teaser": "Tomorrow: typing indicators and presence.",
+    "cta": "Comment M S D for the free cheatsheet."
+  },
+  "nodes": [
+    {
+      "title": ["Sent once.", "Shown twice."], "titleSize": 104,
+      "blocks": [
+        {"type": "panel", "label": "CHAT THREAD", "tag": {"text": "OUT OF ORDER", "tone": "red", "cue": "out of order", "sfx": "bell"},
+         "items": [{"type": "rows", "items": [
+           {"icon": "ok", "text": "hello", "cue": "show up twice", "dt": -1.2},
+           {"icon": "x", "text": "hello", "tone": "red", "cue": "twice"},
+           {"icon": "clock", "text": "see you at six", "tone": "amber", "cue": "out of order"}]}]},
+        {"type": "pills", "items": [{"text": "Design message delivery", "tone": "blue", "size": 38, "cue": "design message delivery"}]}
+      ]
+    },
+    {
+      "title": ["The trap:", "append arrivals"],
+      "blocks": [
+        {"type": "panel", "label": "NAIVE CHAT", "items": [
+          {"type": "code", "parts": [["list.add(", ""], ["incoming", "hl"], [")", ""]], "cue": "append whatever arrives"},
+          {"type": "rows", "items": [
+            {"icon": "x", "text": "duplicates on retry", "tone": "red", "cue": "duplicates"},
+            {"icon": "x", "text": "network reorders", "tone": "red", "cue": "reorders"}]}]},
+        {"type": "pills", "width": 0.55, "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}]}
+      ]
+    },
+    {
+      "title": ["Client", "ID"], "titleSize": 130,
+      "blocks": [
+        {"type": "panel", "label": "SEND", "items": [{"type": "tokens", "lead": "msg =", "items": [{"text": "client id", "cue": "client generated id"}, {"text": "text", "cue": "before sending"}]}]},
+        {"type": "cells", "items": [{"text": "try 1", "cue": "dedupes on it"}, {"text": "retry", "cue": "dedupes on it", "dt": 0.3}]},
+        {"type": "pills", "width": 0.78, "items": [{"text": "same id = 1 message", "tone": "green", "size": 40, "cue": "a retry is safe", "sfx": "ding"}]}
+      ]
+    },
+    {
+      "title": ["Server", "order"], "titleSize": 120,
+      "blocks": [
+        {"type": "rows", "items": [
+          {"icon": "ok", "text": "seq 41", "cue": "sequence number"},
+          {"icon": "ok", "text": "seq 42", "cue": "per conversation"},
+          {"icon": "ok", "text": "seq 43", "cue": "clients sort by it"}]},
+        {"type": "pills", "items": [{"text": "not the device clock", "tone": "red", "size": 38, "cue": "never by the device clock"}]}
+      ]
+    },
+    {
+      "title": ["Acks and", "retries"], "titleSize": 110,
+      "blocks": [
+        {"type": "pills", "items": [{"text": "sent", "tone": "ink", "cue": "sent"}, {"text": "delivered", "tone": "blue", "cue": "delivered"}, {"text": "read", "tone": "green", "cue": "and read"}]},
+        {"type": "panel", "label": "RETRY", "items": [{"type": "cells", "items": [{"text": "1s", "cue": "retry with backoff"}, {"text": "2s", "cue": "retry with backoff", "dt": 0.4}, {"text": "4s", "cue": "retry with backoff", "dt": 0.8}]}]},
+        {"type": "pills", "width": 0.6, "items": [{"text": "until acked", "tone": "green", "size": 40, "cue": "until the server acks", "sfx": "ding"}]}
+      ]
+    },
+    {
+      "title": ["Gap", "repair"], "titleSize": 130,
+      "blocks": [
+        {"type": "rows", "items": [
+          {"icon": "ok", "text": "seq 3", "cue": "follows three", "dt": -0.8},
+          {"icon": "x", "text": "seq 4 missing", "tone": "red", "cue": "ask for four", "sfx": "bell"},
+          {"icon": "ok", "text": "seq 5", "cue": "sequence five"}]},
+        {"type": "pills", "items": [{"text": "reconnect: sync from last seq", "tone": "blue", "size": 36, "cue": "on reconnect"}]}
+      ]
+    },
+    {
+      "title": ["ID for dedupe.", "Seq for order.", "Ack all."], "titleSize": 96,
+      "blocks": [
+        {"type": "rows", "h": 112, "items": [
+          {"icon": "ok", "text": "Client ID", "sub": "dedupe", "cue": "client id"},
+          {"icon": "ok", "text": "Server seq", "sub": "order", "cue": "server sequence"},
+          {"icon": "ok", "text": "Acks", "sub": "delivery", "cue": "ack everything"}]}
+      ]
+    },
+    {
+      "title": ["Next: Typing", "and presence"],
+      "blocks": [
+        {"type": "rows", "items": [
+          {"text": "Heartbeats", "cue": "typing", "dt": 0.3},
+          {"text": "Throttling", "cue": "indicators", "dt": 0.3},
+          {"text": "Last seen", "cue": "presence", "dt": 0.3}]},
+        {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+        {"type": "pills", "h": 56, "items": [{"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"}, {"text": "Day 12: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}]}
+      ]
+    }
+  ],
+  "flow": {
+    "title": "Message path, end to end", "tag": "#11 CHAT",
+    "boxes": [
+      {"id": "snd", "x": 80, "y": 300, "w": 300, "h": 220, "title": "SENDER", "sub": "client id + retry"},
+      {"id": "srv", "x": 510, "y": 320, "w": 340, "h": 160, "title": "Chat server", "titleSize": 36, "sub": "dedupe + sequence", "chip": {"text": "same id = drop", "at": 1.8}},
+      {"id": "log", "x": 1000, "y": 240, "w": 340, "h": 130, "title": "Message log", "titleSize": 40, "sub": "seq per chat"},
+      {"id": "rcv", "x": 1000, "y": 540, "w": 340, "h": 160, "title": "RECEIVER", "titleSize": 44, "sub": "sort by seq", "tone": "blue"}
+    ],
+    "arrows": [
+      {"from": "snd", "fromSide": "r", "to": "srv", "toSide": "l", "at": 0.9, "label": {"text": "send", "x": 388, "y": 330, "w": 100}},
+      {"from": "srv", "fromSide": "r", "to": "log", "toSide": "l", "at": 3.0, "mid": 905, "label": {"text": "seq 42", "x": 905, "y": 290, "w": 90}},
+      {"from": "log", "fromSide": "b", "to": "rcv", "toSide": "t", "at": 4.6, "dur": 0.5, "label": {"text": "push", "x": 1182, "y": 440, "w": 80}},
+      {"pts": [[510, 450], [380, 450]], "dir": "l", "at": 6.0, "dur": 0.5, "tone": "green", "label": {"text": "ack", "x": 400, "y": 456, "w": 90}},
+      {"pts": [[1000, 640], [680, 640], [680, 484]], "dir": "u", "at": 8.4, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "gap: ask for seq 4", "x": 700, "y": 650, "w": 280}}
+    ],
+    "chips": [
+      {"text": "retry is safe", "x": 80, "y": 560, "w": 300, "tone": "green", "at": 2.4},
+      {"text": "never device clock", "x": 1000, "y": 740, "w": 340, "tone": "redsoft", "at": 5.4}
+    ],
+    "steps": [
+      {"text": "Client ID, send", "at": 0.7}, {"text": "Server assigns seq", "at": 2.9}, {"text": "Push + ack", "at": 4.5}, {"text": "Repair gaps", "at": 8.2}
+    ]
+  },
+  "cover": {
+    "lines": ["Design chat", "delivery", "and order."],
+    "card": {"type": "panel", "label": "CHAT THREAD", "tag": {"text": "OUT OF ORDER", "tone": "red"},
+             "items": [{"type": "rows", "items": [{"icon": "ok", "text": "hello"}, {"icon": "x", "text": "hello", "tone": "red"}]}]}
+  },
+  "social": {
+    "insta_cta": "Comment MSD for the free cheatsheet.",
+    "linkedin_cta": "Question for you: what is the most confusing message ordering bug you have chased in a chat app?",
+    "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #messaging #interviewprep #distributedsystems",
+    "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #ChatSystems #SoftwareEngineering #TechInterviews"
+  }
+}
