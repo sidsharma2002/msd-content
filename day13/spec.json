@@ -1,0 +1,617 @@
+{
+ "day": 13,
+ "topic": "Read receipts and delivery status",
+ "tag": "CHAT",
+ "script": {
+  "hook": "Double ticks lie. Interviewers ask how read receipts really work.",
+  "question": "Design read receipts and delivery status for a chat app.",
+  "trap": "The trap: one boolean per message. It cannot tell sent from delivered from read, and it breaks in group chats.",
+  "steps": [
+   "Model the states. Sending, sent, delivered, read. A state only moves forward, never back.",
+   "Ack at each hop. The server acks the send. The device acks delivery. The reader acks reading.",
+   "Send a watermark. Send one read up to message ten, not one event per message.",
+   "Handle groups and privacy. Store a watermark per member. Respect the receipts setting."
+  ],
+  "takeaway": "States only move forward, and a watermark beats a per message ack.",
+  "teaser": "Tomorrow: local message storage and search.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Double",
+    "ticks lie."
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT THREAD",
+     "tag": {
+      "text": "WRONG TICKS",
+      "tone": "red",
+      "cue": "double ticks",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "ok",
+         "text": "see you at six",
+         "cue": "double ticks"
+        },
+        {
+         "icon": "clock",
+         "text": "two ticks, unread",
+         "tone": "amber",
+         "cue": "how read receipts"
+        },
+        {
+         "icon": "x",
+         "text": "read: never synced",
+         "tone": "red",
+         "cue": "really work"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design receipts and status",
+       "tone": "blue",
+       "size": 38,
+       "cue": "design read receipts"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "one boolean"
+   ],
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE STATUS",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "msg.",
+         ""
+        ],
+        [
+         "isRead",
+         "hl"
+        ],
+        [
+         " = true",
+         ""
+        ]
+       ],
+       "cue": "one boolean per message"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "no sent vs delivered",
+         "tone": "red",
+         "cue": "cannot tell sent"
+        },
+        {
+         "icon": "x",
+         "text": "breaks in groups",
+         "tone": "red",
+         "cue": "group chats"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ],
+     "width": 0.55
+    }
+   ]
+  },
+  {
+   "title": [
+    "Model the",
+    "states"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "cells",
+     "items": [
+      {
+       "text": "sending",
+       "cue": "sending"
+      },
+      {
+       "text": "sent",
+       "cue": "sending sent",
+       "dt": 0.5
+      },
+      {
+       "text": "arrived",
+       "cue": "delivered"
+      },
+      {
+       "text": "read",
+       "cue": "delivered read",
+       "dt": 0.5
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "forward only, never back",
+       "tone": "green",
+       "size": 40,
+       "cue": "only moves forward",
+       "sfx": "ding"
+      }
+     ],
+     "width": 0.85
+    }
+   ]
+  },
+  {
+   "title": [
+    "Ack at",
+    "each hop"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "server acks send",
+       "cue": "the server acks"
+      },
+      {
+       "icon": "ok",
+       "text": "device acks delivery",
+       "cue": "the device acks"
+      },
+      {
+       "icon": "ok",
+       "text": "reader acks reading",
+       "cue": "the reader acks"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "one hop, one state",
+       "tone": "blue",
+       "size": 38,
+       "cue": "acks reading",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Send a",
+    "watermark"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "READER",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "read up to",
+       "items": [
+        {
+         "text": "message 10",
+         "cue": "message ten"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "cells",
+     "items": [
+      {
+       "text": "1 event",
+       "cue": "one read up to"
+      },
+      {
+       "text": "not 10",
+       "cue": "not one event per message"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "batch and debounce",
+       "tone": "green",
+       "size": 40,
+       "cue": "per message",
+       "sfx": "ding"
+      }
+     ],
+     "width": 0.8
+    }
+   ]
+  },
+  {
+   "title": [
+    "Groups and",
+    "privacy"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "watermark per member",
+       "cue": "per member"
+      },
+      {
+       "icon": "ok",
+       "text": "check receipts setting",
+       "cue": "receipts setting"
+      },
+      {
+       "icon": "x",
+       "text": "off = no read ticks",
+       "tone": "red",
+       "cue": "receipts setting"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "privacy decides the ticks",
+       "tone": "blue",
+       "size": 36,
+       "cue": "receipts setting",
+       "dt": 0.6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Forward.",
+    "Watermark."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "States",
+       "sub": "forward only",
+       "cue": "move forward"
+      },
+      {
+       "icon": "ok",
+       "text": "Reads",
+       "sub": "watermark",
+       "cue": "a watermark"
+      },
+      {
+       "icon": "ok",
+       "text": "Acks",
+       "sub": "per hop, batched",
+       "cue": "per message ack"
+      }
+     ],
+     "h": 112
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: Local",
+    "storage"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "SQLite",
+       "cue": "local message",
+       "dt": 0.3
+      },
+      {
+       "text": "Full text search",
+       "cue": "storage",
+       "dt": 0.3
+      },
+      {
+       "text": "Migrations",
+       "cue": "search",
+       "dt": 0.3
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 14: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ],
+     "h": 56
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Receipt path, end to end",
+  "tag": "#13 CHAT",
+  "boxes": [
+   {
+    "id": "snd",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 220,
+    "title": "SENDER",
+    "sub": "sending, sent"
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Chat server",
+    "titleSize": 36,
+    "sub": "stores watermarks",
+    "chip": {
+     "text": "forward only",
+     "at": 1.8
+    }
+   },
+   {
+    "id": "dev",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Device",
+    "titleSize": 40,
+    "sub": "delivered ack"
+   },
+   {
+    "id": "rdr",
+    "x": 1000,
+    "y": 540,
+    "w": 340,
+    "h": 160,
+    "title": "READER",
+    "titleSize": 44,
+    "sub": "read up to 10",
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "snd",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "send",
+     "x": 388,
+     "y": 330,
+     "w": 100
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "dev",
+    "toSide": "l",
+    "at": 3.0,
+    "mid": 905,
+    "label": {
+     "text": "deliver",
+     "x": 905,
+     "y": 290,
+     "w": 90
+    }
+   },
+   {
+    "from": "dev",
+    "fromSide": "b",
+    "to": "rdr",
+    "toSide": "t",
+    "at": 4.6,
+    "dur": 0.5,
+    "label": {
+     "text": "opens chat",
+     "x": 1182,
+     "y": 440,
+     "w": 120
+    }
+   },
+   {
+    "pts": [
+     [
+      510,
+      450
+     ],
+     [
+      380,
+      450
+     ]
+    ],
+    "dir": "l",
+    "at": 6.0,
+    "dur": 0.5,
+    "tone": "green",
+    "label": {
+     "text": "read ack",
+     "x": 400,
+     "y": 456,
+     "w": 90
+    }
+   },
+   {
+    "pts": [
+     [
+      1000,
+      640
+     ],
+     [
+      680,
+      640
+     ],
+     [
+      680,
+      484
+     ]
+    ],
+    "dir": "u",
+    "at": 8.4,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "offline: ack on reconnect",
+     "x": 700,
+     "y": 650,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "batched",
+    "x": 80,
+    "y": 560,
+    "w": 300,
+    "tone": "green",
+    "at": 2.4
+   },
+   {
+    "text": "respect privacy",
+    "x": 1000,
+    "y": 740,
+    "w": 340,
+    "tone": "redsoft",
+    "at": 5.4
+   }
+  ],
+  "steps": [
+   {
+    "text": "Send, sent",
+    "at": 0.7
+   },
+   {
+    "text": "Delivered ack",
+    "at": 2.9
+   },
+   {
+    "text": "Read watermark",
+    "at": 4.5
+   },
+   {
+    "text": "Offline, catch up",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Read",
+   "receipts",
+   "explained."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT THREAD",
+   "tag": {
+    "text": "STATUS",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "see you at six"
+      },
+      {
+       "icon": "clock",
+       "text": "delivered, unread",
+       "tone": "amber"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the most confusing delivery or read status bug you have chased in a chat app?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #readreceipts #messaging #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #ChatSystems #SoftwareEngineering #TechInterviews"
+ }
+}
