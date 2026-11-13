@@ -1,0 +1,149 @@
+{
+ "day": 14,
+ "topic": "Local message storage and search",
+ "tag": "CHAT",
+ "script": {
+  "hook": "Design chat storage that opens instantly and searches years of messages.",
+  "question": "Design local message storage and search for a chat app.",
+  "trap": "The trap: one big table and a LIKE query. It scans every row, and the scroll stutters while new writes pile up.",
+  "steps": [
+   "Shape the schema. Index by chat and time, so opening a chat reads one page, not the whole table.",
+   "Batch the writes. Group incoming messages into one transaction on a single background writer, so the UI thread never waits.",
+   "Add a search index. Keep a separate full text table, so search never scans messages.",
+   "Plan the migrations. Version the schema, migrate in small steps, and prune old data. Never block app launch on a long migration."
+  ],
+  "takeaway": "Index for the screen you open, and search a separate index.",
+  "teaser": "Tomorrow: media upload in chat.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": ["Chat search,", "instantly."],
+   "titleSize": 110,
+   "blocks": [
+    {"type": "panel", "label": "CHAT DATABASE", "tag": {"text": "SLOW SEARCH", "tone": "red", "cue": "searches years", "sfx": "bell"},
+     "items": [{"type": "rows", "items": [
+      {"icon": "ok", "text": "open chat, instant", "cue": "opens instantly"},
+      {"icon": "clock", "text": "search, long wait", "tone": "amber", "cue": "searches years"},
+      {"icon": "x", "text": "years of messages", "tone": "red", "cue": "of messages"}]}]},
+    {"type": "pills", "items": [{"text": "Design storage and search", "tone": "blue", "size": 38, "cue": "design local message"}]}
+   ]
+  },
+  {
+   "title": ["The trap:", "one big table"],
+   "blocks": [
+    {"type": "panel", "label": "NAIVE SEARCH", "items": [
+     {"type": "code", "parts": [["WHERE text ", ""], ["LIKE", "hl"], [" '%hi%'", ""]], "cue": "like query"},
+     {"type": "rows", "items": [
+      {"icon": "x", "text": "scans every row", "tone": "red", "cue": "scans every row"},
+      {"icon": "x", "text": "scroll stutters", "tone": "red", "cue": "scroll stutters"}]}]},
+    {"type": "pills", "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}], "width": 0.55}
+   ]
+  },
+  {
+   "title": ["Shape the", "schema"],
+   "titleSize": 120,
+   "blocks": [
+    {"type": "cells", "items": [
+     {"text": "chat id", "cue": "index by chat"},
+     {"text": "time", "cue": "and time", "dt": 0.3}]},
+    {"type": "pills", "items": [{"text": "read one page, not all", "tone": "green", "size": 40, "cue": "reads one page", "sfx": "ding"}], "width": 0.9}
+   ]
+  },
+  {
+   "title": ["Batch the", "writes"],
+   "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "incoming messages", "cue": "incoming messages"},
+     {"icon": "ok", "text": "one transaction", "cue": "one transaction"},
+     {"icon": "ok", "text": "single writer thread", "cue": "single background writer"}]},
+    {"type": "pills", "items": [{"text": "UI thread never waits", "tone": "blue", "size": 38, "cue": "never waits"}]}
+   ]
+  },
+  {
+   "title": ["Add a search", "index"],
+   "titleSize": 104,
+   "blocks": [
+    {"type": "cells", "items": [
+     {"text": "messages", "cue": "search index"},
+     {"text": "full text", "cue": "full text table", "dt": 0.3}]},
+    {"type": "pills", "items": [{"text": "search skips the scan", "tone": "green", "size": 38, "cue": "never scans", "sfx": "ding"}], "width": 0.9}
+   ]
+  },
+  {
+   "title": ["Plan the", "migrations"],
+   "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "version the schema", "cue": "version the schema"},
+     {"icon": "ok", "text": "small steps", "cue": "small steps"},
+     {"icon": "ok", "text": "prune old data", "cue": "prune old data"}]},
+    {"type": "pills", "items": [{"text": "never block launch", "tone": "red", "size": 38, "cue": "never block", "sfx": "bell"}]}
+   ]
+  },
+  {
+   "title": ["Index.", "Separate."],
+   "titleSize": 110,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "Reads", "sub": "indexed by chat, time", "cue": "index for the screen"},
+     {"icon": "ok", "text": "Search", "sub": "its own index", "cue": "search a separate"},
+     {"icon": "ok", "text": "Schema", "sub": "versioned", "cue": "separate index"}], "h": 112}
+   ]
+  },
+  {
+   "title": ["Next: Media", "upload"],
+   "blocks": [
+    {"type": "rows", "items": [
+     {"text": "Chunked upload", "cue": "tomorrow", "dt": 0.3},
+     {"text": "Resume on failure", "cue": "media", "dt": 0.3},
+     {"text": "Compression", "cue": "upload", "dt": 0.3}]},
+    {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+    {"type": "pills", "items": [
+     {"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"},
+     {"text": "Day 15: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}], "h": 56}
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Storage path, end to end",
+  "tag": "#14 CHAT",
+  "boxes": [
+   {"id": "snd", "x": 80, "y": 300, "w": 300, "h": 220, "title": "CHAT UI", "sub": "reads a page"},
+   {"id": "srv", "x": 510, "y": 320, "w": 340, "h": 160, "title": "Write queue", "titleSize": 36, "sub": "one writer", "chip": {"text": "batched", "at": 1.8}},
+   {"id": "dev", "x": 1000, "y": 240, "w": 340, "h": 130, "title": "Messages", "titleSize": 40, "sub": "chat id, time"},
+   {"id": "rdr", "x": 1000, "y": 540, "w": 340, "h": 160, "title": "SEARCH", "titleSize": 44, "sub": "full text index", "tone": "blue"}
+  ],
+  "arrows": [
+   {"from": "snd", "fromSide": "r", "to": "srv", "toSide": "l", "at": 0.9, "label": {"text": "new msg", "x": 388, "y": 330, "w": 100}},
+   {"from": "srv", "fromSide": "r", "to": "dev", "toSide": "l", "at": 3.0, "mid": 905, "label": {"text": "commit", "x": 905, "y": 290, "w": 90}},
+   {"from": "dev", "fromSide": "b", "to": "rdr", "toSide": "t", "at": 4.6, "dur": 0.5, "label": {"text": "index", "x": 1182, "y": 440, "w": 120}},
+   {"pts": [[510, 450], [380, 450]], "dir": "l", "at": 6.0, "dur": 0.5, "tone": "green", "label": {"text": "one page", "x": 400, "y": 456, "w": 90}},
+   {"pts": [[1000, 640], [680, 640], [680, 484]], "dir": "u", "at": 8.4, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "migration fails: roll back", "x": 700, "y": 650, "w": 280}}
+  ],
+  "chips": [
+   {"text": "one transaction", "x": 80, "y": 560, "w": 300, "tone": "green", "at": 2.4},
+   {"text": "prune old data", "x": 1000, "y": 740, "w": 340, "tone": "redsoft", "at": 5.4}
+  ],
+  "steps": [
+   {"text": "Write, batched", "at": 0.7},
+   {"text": "Commit to DB", "at": 2.9},
+   {"text": "Index for search", "at": 4.5},
+   {"text": "Migrate safely", "at": 8.2}
+  ]
+ },
+ "cover": {
+  "lines": ["Chat", "search", "at scale."],
+  "card": {"type": "panel", "label": "SEARCH", "tag": {"text": "FULL SCAN", "tone": "red"},
+   "items": [{"type": "rows", "items": [
+    {"icon": "ok", "text": "see you at six"},
+    {"icon": "clock", "text": "scanning every row", "tone": "amber"}]}]}
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: which chat storage or search decision would you take back if you could redo it?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #sqlite #fulltextsearch #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #ChatSystems #SoftwareEngineering #TechInterviews"
+ }
+}
