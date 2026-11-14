@@ -1,0 +1,609 @@
+{
+ "day": 15,
+ "topic": "Media upload in chat",
+ "tag": "CHAT",
+ "series": "Chat system design",
+ "part": 5,
+ "total": 10,
+ "script": {
+  "hook": "Design media upload in chat that survives a dead network mid-video.",
+  "question": "Design media upload for a chat app.",
+  "trap": "The trap: attach the file to the request. Big videos time out, and restart from zero on every drop.",
+  "steps": [
+   "Upload first, send second. Store the bytes, then send a message that points to them.",
+   "Chunk and resume. Split big files into chunks. After a drop, send only what is missing.",
+   "Preview on device. Show a thumbnail at once, with progress. Let the user cancel.",
+   "Pending state. Mark the message as sending until the upload finishes. Retry with backoff, even after a restart."
+  ],
+  "takeaway": "Upload the bytes first, send a pointer, and resume instead of restarting.",
+  "teaser": "Tomorrow: group chat fan-out.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Video upload",
+    "dies here."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT UPLOAD",
+     "tag": {
+      "text": "TIMED OUT",
+      "tone": "red",
+      "cue": "dead network",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "meter",
+       "from": 0.3,
+       "to": 1.8
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design media upload in chat",
+       "tone": "blue",
+       "size": 38,
+       "cue": "design media upload in chat"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "attach it"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE SEND",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "send(message + ",
+         ""
+        ],
+        [
+         "file bytes",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "attach the file"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "times out",
+         "tone": "red",
+         "cue": "time out"
+        },
+        {
+         "icon": "x",
+         "text": "restarts from zero",
+         "tone": "red",
+         "cue": "restart from zero"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Upload",
+    "first"
+   ],
+   "blocks": [
+    {
+     "type": "cells",
+     "items": [
+      {
+       "text": "bytes",
+       "cue": "store the bytes"
+      },
+      {
+       "text": "pointer",
+       "cue": "points to them"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "message = pointer",
+       "tone": "green",
+       "size": 40,
+       "cue": "points to them",
+       "sfx": "ding"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Chunk",
+    "and resume"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "bars",
+     "h": 220,
+     "items": [
+      {
+       "label": "chunks 1 to 6",
+       "v": 1,
+       "tone": "blue",
+       "cue": "split big files into chunks"
+      },
+      {
+       "label": "chunk 7",
+       "v": 0.4,
+       "tone": "red",
+       "cue": "send only what is missing",
+       "badge": {
+        "text": "RESUME",
+        "tone": "green",
+        "cue": "after a drop"
+       }
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "server keeps a chunk list",
+       "cue": "after a drop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Preview",
+    "on device"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "UPLOAD BUBBLE",
+     "items": [
+      {
+       "type": "bars",
+       "h": 120,
+       "items": [
+        {
+         "label": "upload",
+         "v": 0.4,
+         "tone": "blue",
+         "cue": "with progress"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "thumb first",
+       "tone": "green",
+       "size": 40,
+       "cue": "show a thumbnail at once"
+      },
+      {
+       "text": "cancel",
+       "tone": "red",
+       "size": 40,
+       "cue": "let the user cancel"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Pending",
+    "state"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "clock",
+       "text": "sending",
+       "tone": "amber",
+       "cue": "mark the message as sending"
+      },
+      {
+       "icon": "ok",
+       "text": "sent",
+       "cue": "until the upload finishes"
+      },
+      {
+       "icon": "x",
+       "text": "retry with backoff",
+       "tone": "red",
+       "cue": "retry with backoff"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "h": 80,
+     "items": [
+      {
+       "text": "survives restarts",
+       "tone": "blue",
+       "size": 40,
+       "cue": "after a restart"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Upload bytes.",
+    "Send pointer.",
+    "Resume."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Bytes",
+       "sub": "upload first",
+       "cue": "upload the bytes first"
+      },
+      {
+       "icon": "ok",
+       "text": "Pointer",
+       "sub": "send it",
+       "cue": "send a pointer"
+      },
+      {
+       "icon": "ok",
+       "text": "Resume",
+       "sub": "never restart",
+       "cue": "resume instead of restarting"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: group",
+    "chat fan-out"
+   ],
+   "blocks": [
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "fan-out",
+       "tone": "blue",
+       "size": 40,
+       "cue": "group chat fan-out"
+      },
+      {
+       "text": "ordering",
+       "tone": "amber",
+       "size": 40,
+       "cue": "group chat fan-out",
+       "dt": 0.3
+      },
+      {
+       "text": "hot groups",
+       "tone": "red",
+       "size": 40,
+       "cue": "group chat fan-out",
+       "dt": 0.6
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Media upload, end to end",
+  "tag": "#15 CHAT MEDIA",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "CHAT",
+    "rows": [
+     {
+      "text": "video.mov",
+      "at": 0.4,
+      "grad": 0,
+      "loaded": 8.6
+     },
+     {
+      "text": "message (pending)",
+      "at": 0.6,
+      "grad": 3,
+      "stale": 10.0
+     }
+    ]
+   },
+   {
+    "id": "chunks",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Chunker",
+    "titleSize": 36,
+    "sub": "fixed size, resumable",
+    "chip": {
+     "text": "chunk 1..n",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "store",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Object storage",
+    "titleSize": 36,
+    "sub": "the bytes"
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Chat server",
+    "sub": "stores the pointer"
+   },
+   {
+    "id": "fan",
+    "x": 1000,
+    "y": 620,
+    "w": 340,
+    "h": 130,
+    "title": "Recipients",
+    "sub": "get the message",
+    "dashed": true
+   },
+   {
+    "id": "thumb",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Thumbnail",
+    "titleSize": 40,
+    "sub": "on device",
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "chunks",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "upload",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "chunks",
+    "fromSide": "r",
+    "to": "store",
+    "toSide": "l",
+    "at": 3.4,
+    "label": {
+     "text": "chunk",
+     "x": 866,
+     "y": 270,
+     "w": 100
+    }
+   },
+   {
+    "from": "store",
+    "fromSide": "b",
+    "to": "srv",
+    "toSide": "t",
+    "at": 4.6,
+    "dur": 0.4,
+    "label": {
+     "text": "done",
+     "x": 1182,
+     "y": 384,
+     "w": 80
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "fan",
+    "toSide": "t",
+    "at": 5.6,
+    "dur": 0.4,
+    "tone": "green",
+    "label": {
+     "text": "pointer",
+     "x": 1182,
+     "y": 574,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      710,
+      610
+     ],
+     [
+      710,
+      590
+     ],
+     [
+      230,
+      590
+     ],
+     [
+      230,
+      566
+     ]
+    ],
+    "dir": "u",
+    "at": 9.0,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "drop: resend missing",
+     "x": 260,
+     "y": 596,
+     "w": 300
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "missing chunks only",
+    "x": 530,
+    "y": 496,
+    "w": 260,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "waits for the file",
+    "x": 560,
+    "y": 776,
+    "w": 260,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "thumb at once",
+    "x": 560,
+    "y": 828,
+    "w": 260,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Upload chunks",
+    "at": 0.7
+   },
+   {
+    "text": "Store the bytes",
+    "at": 3.2
+   },
+   {
+    "text": "Send the pointer",
+    "at": 5.9
+   },
+   {
+    "text": "Resend missing",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Upload a",
+   "video",
+   "in chat."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT UPLOAD",
+   "tag": {
+    "text": "90% DROP",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: would you chunk every upload, or only files above a size limit? Tell me which and why.",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #mediaupload #resumableupload #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #ChatSystems #MediaUpload #OfflineFirst #SoftwareEngineering #TechInterviews"
+ }
+}
