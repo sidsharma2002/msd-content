@@ -1,0 +1,560 @@
+{
+  "day": 16,
+  "topic": "Group chat fan-out",
+  "tag": "CHAT",
+  "series": "Chat system design",
+  "part": 6,
+  "total": 10,
+  "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+  "script": {
+    "hook": "One message to a group of five hundred. Who does the copying?",
+    "question": "Design group chat fan-out that delivers one message to every member.",
+    "trap": "The trap: the sender loops over members and writes one copy per person. That hammers the server on every send, slows big groups, and a retry sends duplicates.",
+    "steps": [
+      "Store once. Write the message to one group log with a sequence number. The sender makes one request, not five hundred.",
+      "Small groups fan out on write. Each member gets a copy in their inbox, so reads are instant.",
+      "Large groups fan out on read. Members pull the group log from their last cursor, so writes stay cheap.",
+      "Wake the phones. Push only offline members, and collapse the rest into one notification per group."
+    ],
+    "takeaway": "Store the message once. Copy it only when the room is small, and read it when the room is large.",
+    "teaser": "Tomorrow: End-to-end encryption on mobile.",
+    "cta": "Comment write or read, and tell me why."
+  },
+  "nodes": [
+    {
+      "title": [
+        "One message.",
+        "Five hundred."
+      ],
+      "titleSize": 104,
+      "blocks": [
+        {
+          "type": "panel",
+          "label": "GROUP CHAT",
+          "tag": {
+            "text": "500 COPIES",
+            "tone": "red",
+            "cue": "copying",
+            "sfx": "bell"
+          },
+          "items": [
+            {
+              "type": "cells",
+              "items": [
+                {
+                  "text": "member 1",
+                  "cue": "one message"
+                },
+                {
+                  "text": "member 2",
+                  "cue": "one message",
+                  "dt": 0.2
+                },
+                {
+                  "text": "member 3",
+                  "cue": "one message",
+                  "dt": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pills",
+          "items": [
+            {
+              "text": "Design group chat fan-out",
+              "tone": "blue",
+              "size": 38,
+              "cue": "design group chat fan-out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "The trap:",
+        "copy per member"
+      ],
+      "titleSize": 110,
+      "blocks": [
+        {
+          "type": "panel",
+          "label": "NAIVE SEND",
+          "items": [
+            {
+              "type": "code",
+              "parts": [
+                [
+                  "for m in members: ",
+                  ""
+                ],
+                [
+                  "write(copy)",
+                  "hl"
+                ]
+              ],
+              "cue": "writes one copy per person"
+            },
+            {
+              "type": "rows",
+              "items": [
+                {
+                  "icon": "x",
+                  "text": "hammers the server",
+                  "tone": "red",
+                  "cue": "hammers the server"
+                },
+                {
+                  "icon": "x",
+                  "text": "slow for big groups",
+                  "tone": "red",
+                  "cue": "slows big groups"
+                },
+                {
+                  "icon": "x",
+                  "text": "retry sends duplicates",
+                  "tone": "red",
+                  "cue": "retry sends duplicates"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Store",
+        "once"
+      ],
+      "titleSize": 120,
+      "blocks": [
+        {
+          "type": "panel",
+          "label": "GROUP LOG",
+          "items": [
+            {
+              "type": "tokens",
+              "lead": "seq",
+              "items": [
+                {
+                  "text": "m1",
+                  "cue": "one group log"
+                },
+                {
+                  "text": "m2",
+                  "cue": "one group log",
+                  "dt": 0.2
+                },
+                {
+                  "text": "m3",
+                  "cue": "sequence number"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pills",
+          "items": [
+            {
+              "text": "1 request",
+              "tone": "green",
+              "size": 42,
+              "cue": "one request",
+              "sfx": "ding"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Small groups:",
+        "copy on write"
+      ],
+      "titleSize": 96,
+      "blocks": [
+        {
+          "type": "panel",
+          "label": "INBOX COPIES",
+          "items": [
+            {
+              "type": "cells",
+              "items": [
+                {
+                  "text": "inbox A",
+                  "cue": "each member gets a copy"
+                },
+                {
+                  "text": "inbox B",
+                  "cue": "each member gets a copy",
+                  "dt": 0.2
+                },
+                {
+                  "text": "inbox C",
+                  "cue": "each member gets a copy",
+                  "dt": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pills",
+          "items": [
+            {
+              "text": "reads are instant",
+              "tone": "green",
+              "size": 40,
+              "cue": "reads are instant",
+              "sfx": "ding"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Large groups:",
+        "read on pull"
+      ],
+      "titleSize": 96,
+      "blocks": [
+        {
+          "type": "tiers",
+          "items": [
+            {
+              "name": "GROUP LOG",
+              "main": "one copy",
+              "cue": "members pull the group log",
+              "tag": {
+                "text": "cursor",
+                "tone": "blue",
+                "cue": "last cursor"
+              }
+            },
+            {
+              "name": "MEMBER",
+              "main": "pulls when it opens",
+              "dashed": true,
+              "cue": "from their last cursor",
+              "tag": {
+                "text": "cheap writes",
+                "tone": "green",
+                "cue": "writes stay cheap"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Wake the",
+        "phones."
+      ],
+      "titleSize": 120,
+      "blocks": [
+        {
+          "type": "rows",
+          "items": [
+            {
+              "icon": "ok",
+              "text": "Offline",
+              "sub": "push these",
+              "tone": "green",
+              "cue": "push only offline members"
+            },
+            {
+              "icon": "ok",
+              "text": "Per group",
+              "sub": "one push",
+              "tone": "blue",
+              "cue": "one notification per group"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Store once.",
+        "Copy small.",
+        "Read large."
+      ],
+      "titleSize": 96,
+      "blocks": [
+        {
+          "type": "rows",
+          "h": 112,
+          "items": [
+            {
+              "icon": "ok",
+              "text": "Write",
+              "sub": "one group log",
+              "cue": "store the message once"
+            },
+            {
+              "icon": "ok",
+              "text": "Small",
+              "sub": "copy on write",
+              "cue": "copy it only when the room is small"
+            },
+            {
+              "icon": "ok",
+              "text": "Large",
+              "sub": "read on pull",
+              "cue": "read it when the room is large"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": [
+        "Next: end-to-end",
+        "encryption"
+      ],
+      "blocks": [
+        {
+          "type": "rows",
+          "items": [
+            {
+              "text": "Keys on device",
+              "cue": "tomorrow",
+              "dt": 0.3
+            },
+            {
+              "text": "Server sees ciphertext",
+              "cue": "encryption",
+              "dt": 0.3
+            },
+            {
+              "text": "Key rotation",
+              "cue": "mobile",
+              "dt": 0.3
+            }
+          ]
+        },
+        {
+          "type": "cta",
+          "text": "Comment your pick",
+          "icon": "bubble",
+          "cue": "comment",
+          "sfx": "sparkle"
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "title": "Group fan-out, end to end",
+    "tag": "#16 GROUP CHAT",
+    "boxes": [
+      {
+        "id": "snd",
+        "x": 80,
+        "y": 300,
+        "w": 300,
+        "h": 260,
+        "title": "SENDER",
+        "rows": [
+          {
+            "text": "one message",
+            "at": 0.4,
+            "grad": 0
+          },
+          {
+            "text": "one request",
+            "at": 0.6,
+            "grad": 3
+          }
+        ]
+      },
+      {
+        "id": "log",
+        "x": 510,
+        "y": 320,
+        "w": 340,
+        "h": 160,
+        "title": "Group log",
+        "titleSize": 40,
+        "sub": "one copy, sequence no.",
+        "chip": {
+          "text": "seq + id",
+          "at": 1.6
+        }
+      },
+      {
+        "id": "inb",
+        "x": 1000,
+        "y": 240,
+        "w": 340,
+        "h": 130,
+        "title": "Member inbox",
+        "titleSize": 38,
+        "sub": "small groups: copy"
+      },
+      {
+        "id": "pul",
+        "x": 1000,
+        "y": 430,
+        "w": 340,
+        "h": 130,
+        "title": "Member pulls",
+        "sub": "large groups: cursor"
+      },
+      {
+        "id": "psh",
+        "x": 560,
+        "y": 610,
+        "w": 300,
+        "h": 150,
+        "title": "Push service",
+        "titleSize": 40,
+        "sub": "offline only",
+        "dashed": true,
+        "tone": "blue"
+      }
+    ],
+    "arrows": [
+      {
+        "from": "snd",
+        "fromSide": "r",
+        "to": "log",
+        "toSide": "l",
+        "at": 0.9,
+        "label": {
+          "text": "send",
+          "x": 388,
+          "y": 364,
+          "w": 100
+        }
+      },
+      {
+        "from": "log",
+        "fromSide": "r",
+        "to": "inb",
+        "toSide": "l",
+        "at": 3.4,
+        "mid": 905,
+        "label": {
+          "text": "small",
+          "x": 915,
+          "y": 330,
+          "w": 80
+        }
+      },
+      {
+        "from": "log",
+        "fromSide": "r",
+        "to": "pul",
+        "toSide": "l",
+        "at": 4.2,
+        "mid": 905,
+        "label": {
+          "text": "large",
+          "x": 915,
+          "y": 440,
+          "w": 80
+        }
+      },
+      {
+        "from": "pul",
+        "fromSide": "b",
+        "to": "psh",
+        "toSide": "r",
+        "at": 6.1,
+        "tone": "green",
+        "label": {
+          "text": "offline only",
+          "x": 896,
+          "y": 650,
+          "w": 100
+        }
+      }
+    ],
+    "chips": [
+      {
+        "text": "one request, one log",
+        "x": 530,
+        "y": 496,
+        "w": 300,
+        "tone": "green",
+        "at": 2.3
+      },
+      {
+        "text": "copy per member: avoid",
+        "x": 560,
+        "y": 776,
+        "w": 300,
+        "tone": "redsoft",
+        "at": 7.0
+      },
+      {
+        "text": "read from cursor",
+        "x": 560,
+        "y": 828,
+        "w": 300,
+        "tone": "green",
+        "at": 7.6
+      }
+    ],
+    "steps": [
+      {
+        "text": "Store once",
+        "at": 0.7
+      },
+      {
+        "text": "Small: copy on write",
+        "at": 3.2
+      },
+      {
+        "text": "Large: read on pull",
+        "at": 5.9
+      },
+      {
+        "text": "Push offline only",
+        "at": 8.2
+      }
+    ]
+  },
+  "cover": {
+    "lines": [
+      "Group chat",
+      "fan-out",
+      "at scale."
+    ],
+    "card": {
+      "type": "panel",
+      "label": "GROUP LOG",
+      "tag": {
+        "text": "500 COPIES",
+        "tone": "red"
+      },
+      "items": [
+        {
+          "type": "grid",
+          "cols": 4,
+          "rows": 1,
+          "tileH": 96,
+          "at0": 0,
+          "step": 0
+        },
+        {
+          "type": "meter",
+          "from": 0,
+          "to": 0.01
+        }
+      ]
+    }
+  },
+  "social": {
+    "insta_cta": "Comment write or read, and tell me why.",
+    "linkedin_cta": "Question for you: once a group passes a few hundred members, do you fan out on write or on read? Which one would you defend in an interview?",
+    "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #groupchat #fanout #realtime #interviewprep",
+    "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #GroupChat #Realtime #Messaging"
+  }
+}
