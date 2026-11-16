@@ -1,0 +1,606 @@
+{
+ "day": 17,
+ "topic": "End-to-end encryption on mobile",
+ "tag": "CHAT",
+ "series": "Chat system design",
+ "part": 7,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "The server relays every message but must never read one.",
+  "question": "Design end-to-end encryption for a chat app.",
+  "trap": "The trap: rely on TLS or share one key. TLS ends at the server, and a stolen key leaks every chat.",
+  "steps": [
+   "Keys on device. Each phone keeps its private key in secure hardware. The server stores only public keys.",
+   "Handshake. The sender fetches public keys and derives a shared secret, even offline.",
+   "Ratchet. Every message gets a fresh key, so one stolen key cannot open past or future messages.",
+   "Many devices. Each device has its own keys, and safety numbers catch a swapped key."
+  ],
+  "takeaway": "The server routes ciphertext. Only the phones ever hold the keys.",
+  "teaser": "Tomorrow: Reconnect and catch-up sync after offline.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Server relays.",
+    "Never reads."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT SERVER",
+     "tag": {
+      "text": "READABLE",
+      "tone": "red",
+      "cue": "never read",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "hello",
+         "cue": "relays every message"
+        },
+        {
+         "text": "hello",
+         "cue": "relays every message",
+         "dt": 0.2
+        },
+        {
+         "text": "hello",
+         "cue": "relays every message",
+         "dt": 0.4
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design end-to-end encryption",
+       "tone": "blue",
+       "size": 36,
+       "cue": "design end to end encryption"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "TLS or one key"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE SETUP",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "encrypt(msg, ",
+         ""
+        ],
+        [
+         "sharedKey",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "share one key"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "TLS ends at server",
+         "tone": "red",
+         "cue": "tls ends at the server"
+        },
+        {
+         "icon": "x",
+         "text": "one stolen key",
+         "tone": "red",
+         "cue": "stolen key"
+        },
+        {
+         "icon": "x",
+         "text": "leaks every chat",
+         "tone": "red",
+         "cue": "leaks every chat"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Keys on",
+    "device"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "PHONE",
+       "main": "private key",
+       "cue": "secure hardware",
+       "tag": {
+        "text": "never leaves",
+        "tone": "green",
+        "cue": "private key"
+       }
+      },
+      {
+       "name": "SERVER",
+       "main": "public keys only",
+       "dashed": true,
+       "cue": "stores only public keys",
+       "tag": {
+        "text": "no secrets",
+        "tone": "blue",
+        "cue": "public keys"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The",
+    "handshake"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "KEY BUNDLE",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "fetch",
+       "items": [
+        {
+         "text": "identity",
+         "cue": "fetches public keys"
+        },
+        {
+         "text": "prekey",
+         "cue": "fetches public keys",
+         "dt": 0.3
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.85,
+     "items": [
+      {
+       "text": "shared secret",
+       "tone": "green",
+       "size": 40,
+       "cue": "shared secret",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "receiver offline: ok",
+       "tone": "amber",
+       "size": 36,
+       "cue": "even offline"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Ratchet",
+    "every message"
+   ],
+   "titleSize": 100,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "MESSAGE KEYS",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "key",
+       "items": [
+        {
+         "text": "k1",
+         "cue": "fresh key"
+        },
+        {
+         "text": "k2",
+         "cue": "fresh key",
+         "dt": 0.8
+        },
+        {
+         "text": "k3",
+         "cue": "fresh key",
+         "dt": 0.4
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "x",
+       "text": "stolen key: past safe",
+       "tone": "red",
+       "size": 38,
+       "cue": "stolen key",
+       "tag": {
+        "text": "contained",
+        "tone": "green",
+        "cue": "future messages",
+        "sfx": "bell"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Many",
+    "devices"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Keys per device",
+       "cue": "its own keys"
+      },
+      {
+       "icon": "ok",
+       "text": "Swapped key: alert",
+       "cue": "swapped key"
+      },
+      {
+       "icon": "ok",
+       "text": "Safety numbers",
+       "tone": "amber",
+       "cue": "safety numbers"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Server routes.",
+    "Phones hold keys."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Server",
+       "sub": "routes ciphertext",
+       "cue": "routes ciphertext"
+      },
+      {
+       "icon": "ok",
+       "text": "Phones",
+       "sub": "hold the keys",
+       "cue": "only the phones"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: reconnect",
+    "and catch-up"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Cursor resume",
+       "cue": "tomorrow",
+       "dt": 0.3
+      },
+      {
+       "text": "Gap detection",
+       "cue": "reconnect",
+       "dt": 0.3
+      },
+      {
+       "text": "Backfill order",
+       "cue": "offline",
+       "dt": 0.3
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 18: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "E2E chat, end to end",
+  "tag": "#17 E2E",
+  "boxes": [
+   {
+    "id": "snd",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "SENDER",
+    "rows": [
+     {
+      "text": "plaintext",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "ciphertext",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "routes ciphertext",
+    "chip": {
+     "text": "public keys only",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "rcv",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Receiver",
+    "titleSize": 44,
+    "sub": "private key decrypts"
+   },
+   {
+    "id": "rat",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Ratchet",
+    "titleSize": 44,
+    "sub": "new key per message"
+   },
+   {
+    "id": "sec",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Secure HW",
+    "titleSize": 40,
+    "sub": "private key stays",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "snd",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "encrypted",
+     "x": 388,
+     "y": 364,
+     "w": 110
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "rcv",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "relay",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "rcv",
+    "fromSide": "b",
+    "to": "rat",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "next key",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "rat",
+    "fromSide": "b",
+    "to": "sec",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "keys local",
+     "x": 896,
+     "y": 650,
+     "w": 120
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "server cannot read",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "one shared key: avoid",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "stolen key: contained",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Keys on device",
+    "at": 0.7
+   },
+   {
+    "text": "Handshake",
+    "at": 3.2
+   },
+   {
+    "text": "Ratchet per message",
+    "at": 5.9
+   },
+   {
+    "text": "Verify safety numbers",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "End-to-end",
+   "chat",
+   "encryption."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT SERVER",
+   "tag": {
+    "text": "READABLE",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: when a user gets a new phone, do you restore message history from a backup, or start clean and keep the keys device-bound? Which one would you defend?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #encryption #e2ee #chatapp #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Encryption #Security #Messaging"
+ }
+}
