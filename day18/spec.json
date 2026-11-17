@@ -1,0 +1,600 @@
+{
+ "day": 18,
+ "topic": "Reconnect and catch-up sync after offline",
+ "tag": "CHAT",
+ "series": "Chat system design",
+ "part": 8,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "The phone was offline for an hour. Which messages did it miss?",
+  "question": "Design reconnect and catch-up sync for a chat app.",
+  "trap": "The trap: reload every conversation on reconnect. It wastes data, and messages sent during the reload still slip through.",
+  "steps": [
+   "Cursor. Save the last synced sequence number per chat. Ask only for what comes after it.",
+   "Gap check. A hole in the sequence means a missed message, so fetch exactly that range.",
+   "Backfill. Apply oldest first and dedupe by message id, so retries never double a message.",
+   "Handoff. Buffer live messages while catching up, then merge by sequence and go live."
+  ],
+  "takeaway": "Remember where you stopped. Fetch only the gap, in order.",
+  "teaser": "Tomorrow: Chat list pagination and unread counts.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Offline an hour.",
+    "What was missed?"
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT THREAD",
+     "tag": {
+      "text": "MISSED",
+      "tone": "red",
+      "cue": "miss",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "msg 41",
+         "cue": "offline for an hour"
+        },
+        {
+         "text": "msg 42",
+         "cue": "offline for an hour",
+         "dt": 0.2
+        },
+        {
+         "text": "???",
+         "cue": "which messages",
+         "dt": 0.1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design reconnect and catch-up",
+       "tone": "blue",
+       "size": 34,
+       "cue": "design reconnect and catch up"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "reload all"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE RECONNECT",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "onConnect { ",
+         ""
+        ],
+        [
+         "fetchAllChats()",
+         "hl"
+        ],
+        [
+         " }",
+         ""
+        ]
+       ],
+       "cue": "reload every conversation"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "wastes data",
+         "tone": "red",
+         "cue": "wastes data"
+        },
+        {
+         "icon": "x",
+         "text": "floods the server",
+         "tone": "red",
+         "cue": "on reconnect"
+        },
+        {
+         "icon": "x",
+         "text": "misses in-flight msgs",
+         "tone": "red",
+         "cue": "slip through"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Cursor"
+   ],
+   "titleSize": 130,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "PER CHAT",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "last seq",
+       "items": [
+        {
+         "text": "41",
+         "cue": "last synced sequence"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.85,
+     "items": [
+      {
+       "text": "ask: after 41",
+       "tone": "green",
+       "size": 40,
+       "cue": "after it",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "only what changed",
+       "tone": "amber",
+       "size": 36,
+       "cue": "only for what"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Gap",
+    "check"
+   ],
+   "titleSize": 130,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "SEQUENCE",
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "41",
+         "cue": "a hole in the sequence"
+        },
+        {
+         "text": "42",
+         "cue": "a hole in the sequence",
+         "dt": 0.2
+        },
+        {
+         "text": "45",
+         "cue": "a hole in the sequence",
+         "dt": 0.5
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "x",
+       "text": "hole: 43 to 44 missing",
+       "tone": "red",
+       "size": 38,
+       "cue": "missed message",
+       "tag": {
+        "text": "fetch",
+        "tone": "green",
+        "cue": "fetch exactly",
+        "sfx": "bell"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Backfill",
+    "in order"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Pages, oldest first",
+       "cue": "oldest first"
+      },
+      {
+       "icon": "ok",
+       "text": "Dedupe by message id",
+       "cue": "dedupe"
+      },
+      {
+       "icon": "clock",
+       "text": "Retry is safe",
+       "tone": "amber",
+       "cue": "retries never double"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Handoff",
+    "to live"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "LIVE",
+       "main": "buffered meanwhile",
+       "cue": "buffer live messages",
+       "tag": {
+        "text": "held",
+        "tone": "amber",
+        "cue": "while catching up"
+       }
+      },
+      {
+       "name": "CATCH-UP",
+       "main": "merge by sequence",
+       "dashed": true,
+       "cue": "merge by sequence",
+       "tag": {
+        "text": "go live",
+        "tone": "green",
+        "cue": "go live",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Remember where.",
+    "Fetch the gap."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Cursor",
+       "sub": "where you stopped",
+       "cue": "remember where you stopped"
+      },
+      {
+       "icon": "ok",
+       "text": "Gap only",
+       "sub": "in order",
+       "cue": "only the gap"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: chat list",
+    "and unread counts"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Cursor paging",
+       "cue": "tomorrow",
+       "dt": 0.3
+      },
+      {
+       "text": "Unread counters",
+       "cue": "list",
+       "dt": 0.3
+      },
+      {
+       "text": "Badge sync",
+       "cue": "unread",
+       "dt": 0.3
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 19: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Catch-up sync, end to end",
+  "tag": "#18 CATCH-UP",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "PHONE",
+    "rows": [
+     {
+      "text": "last seq 41",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "offline gap",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "messages by sequence",
+    "chip": {
+     "text": "after 41",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "gap",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Gap check",
+    "titleSize": 44,
+    "sub": "hole: 43 to 44"
+   },
+   {
+    "id": "bf",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Backfill",
+    "titleSize": 44,
+    "sub": "oldest first, deduped"
+   },
+   {
+    "id": "live",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Live socket",
+    "titleSize": 40,
+    "sub": "buffer, then merge",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "cursor",
+     "x": 388,
+     "y": 364,
+     "w": 110
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "gap",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "batch",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "gap",
+    "fromSide": "b",
+    "to": "bf",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "fetch gap",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "bf",
+    "fromSide": "b",
+    "to": "live",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "go live",
+     "x": 896,
+     "y": 650,
+     "w": 120
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "only the gap",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "full reload: avoid",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "retry: no duplicates",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Save the cursor",
+    "at": 0.7
+   },
+   {
+    "text": "Detect the gap",
+    "at": 3.2
+   },
+   {
+    "text": "Backfill in order",
+    "at": 5.9
+   },
+   {
+    "text": "Merge and go live",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Chat",
+   "catch-up",
+   "sync."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT THREAD",
+   "tag": {
+    "text": "MISSED",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: when the gap is huge, say weeks offline, do you backfill every message or jump to a snapshot of recent ones? Where do you draw the line?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #offlinefirst #datasync #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #OfflineFirst #Messaging #DataSync"
+ }
+}
