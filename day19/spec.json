@@ -1,0 +1,592 @@
+{
+ "day": 19,
+ "topic": "Chat list pagination and unread counts",
+ "tag": "CHAT",
+ "series": "Chat system design",
+ "part": 9,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "The badge says nine, the chat shows five. Which is wrong?",
+  "question": "Design chat list pagination and unread counts.",
+  "trap": "The trap: count unread from loaded messages. Older pages are missing, so the count lies.",
+  "steps": [
+   "Cursor paging. Page by last activity time, so new messages never shift the pages.",
+   "Counter per chat. The server owns the unread count, stored beside the last read sequence.",
+   "Optimistic read. Opening a chat zeroes the count locally, then syncs. Newer sequence wins.",
+   "Badge sync. The badge is the sum of the counters, muted chats excluded."
+  ],
+  "takeaway": "The server counts. The client pages. Compare by sequence.",
+  "teaser": "Tomorrow: Notification dedupe and badge counts.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Badge: 9.",
+    "Chat: 5."
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT LIST",
+     "tag": {
+      "text": "MISMATCH",
+      "tone": "red",
+      "cue": "wrong",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "badge 9",
+         "cue": "badge says nine"
+        },
+        {
+         "text": "chat 5",
+         "cue": "chat shows five",
+         "dt": 0.2
+        },
+        {
+         "text": "???",
+         "cue": "which is wrong",
+         "dt": 0.1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design chat list + unread",
+       "tone": "blue",
+       "size": 36,
+       "cue": "design chat list pagination"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "count locally"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE COUNT",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "unread = ",
+         ""
+        ],
+        [
+         "loaded.filter(unread)",
+         "hl"
+        ]
+       ],
+       "cue": "from loaded messages"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "misses older messages",
+         "tone": "red",
+         "cue": "older pages are missing"
+        },
+        {
+         "icon": "x",
+         "text": "wrong count",
+         "tone": "red",
+         "cue": "count lies"
+        },
+        {
+         "icon": "x",
+         "text": "slow on big chats",
+         "tone": "red",
+         "cue": "unread"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Cursor",
+    "paging"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT LIST",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "cursor =",
+       "items": [
+        {
+         "text": "last activity",
+         "cue": "last activity time"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.85,
+     "items": [
+      {
+       "text": "pages stay stable",
+       "tone": "green",
+       "size": 40,
+       "cue": "never shift the pages",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "not offset",
+       "tone": "amber",
+       "size": 36,
+       "cue": "page by"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Counter",
+    "per chat"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHAT ROW",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "unread",
+       "items": [
+        {
+         "text": "5",
+         "cue": "unread count"
+        },
+        {
+         "text": "read seq 40",
+         "cue": "last read sequence"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "x",
+       "text": "not from loaded",
+       "tone": "red",
+       "size": 38,
+       "cue": "stored beside",
+       "tag": {
+        "text": "server owns",
+        "tone": "green",
+        "cue": "server owns",
+        "sfx": "bell"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Optimistic",
+    "read"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Open chat: zero it",
+       "cue": "zeroes the count"
+      },
+      {
+       "icon": "ok",
+       "text": "Sync read position",
+       "cue": "then syncs"
+      },
+      {
+       "icon": "clock",
+       "text": "Newer sequence wins",
+       "tone": "amber",
+       "cue": "newer sequence wins"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Badge",
+    "sync"
+   ],
+   "titleSize": 130,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "COUNTERS",
+       "main": "sum, muted excluded",
+       "cue": "sum of the counters",
+       "tag": {
+        "text": "database",
+        "tone": "blue",
+        "cue": "muted chats"
+       }
+      },
+      {
+       "name": "DEVICES",
+       "main": "same badge everywhere",
+       "dashed": true,
+       "cue": "muted chats excluded",
+       "tag": {
+        "text": "synced",
+        "tone": "green",
+        "cue": "muted chats",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Server counts.",
+    "Client pages."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Server",
+       "sub": "owns the count",
+       "cue": "server counts"
+      },
+      {
+       "icon": "ok",
+       "text": "Sequence",
+       "sub": "decides who wins",
+       "cue": "compare by sequence"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: dedupe",
+    "and badge counts"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Duplicate pushes",
+       "cue": "tomorrow",
+       "dt": 0.3
+      },
+      {
+       "text": "Collapse by id",
+       "cue": "notification",
+       "dt": 0.3
+      },
+      {
+       "text": "Badge counts",
+       "cue": "dedupe",
+       "dt": 0.3
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 20: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Chat list, end to end",
+  "tag": "#19 UNREAD",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "CHAT LIST",
+    "rows": [
+     {
+      "text": "Alex  5",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "Team  2",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "owns unread counts",
+    "chip": {
+     "text": "cursor: last activity",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "cnt",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Counter",
+    "titleSize": 44,
+    "sub": "per chat + read seq"
+   },
+   {
+    "id": "db",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Local DB",
+    "titleSize": 44,
+    "sub": "newer seq wins"
+   },
+   {
+    "id": "bdg",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Badge",
+    "titleSize": 46,
+    "sub": "sum, muted excluded",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "page",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "cnt",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "count",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "cnt",
+    "fromSide": "b",
+    "to": "db",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "store",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "db",
+    "fromSide": "b",
+    "to": "bdg",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "sum",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "stable pages",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "count from loaded: avoid",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "stale count: dropped",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Page by cursor",
+    "at": 0.7
+   },
+   {
+    "text": "Server counter",
+    "at": 3.2
+   },
+   {
+    "text": "Optimistic read",
+    "at": 5.9
+   },
+   {
+    "text": "Sum the badge",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Chat list",
+   "unread",
+   "counts."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHAT LIST",
+   "tag": {
+    "text": "MISMATCH",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: when a chat is muted, do you still keep its unread counter or drop it entirely? What bit you in production?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #chatapp #pagination #unreadcount #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Pagination #Messaging #Badges"
+ }
+}
