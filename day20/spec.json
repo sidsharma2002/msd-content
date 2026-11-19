@@ -1,0 +1,596 @@
+{
+ "day": 20,
+ "topic": "Notification dedupe and badge counts",
+ "tag": "CHAT",
+ "series": "Chat system design",
+ "part": 10,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "One message, three buzzes. How do you stop duplicate notifications?",
+  "question": "Design notification dedupe and badge counts.",
+  "trap": "The trap: show every push as it arrives. Retries and extra devices create duplicates, and the badge drifts.",
+  "steps": [
+   "Stable id. Every message carries one id, so a retry is the same notification.",
+   "Collapse key. Show one notification per chat, and replace the old one.",
+   "Seen set. The device stores handled ids. A repeat push is dropped.",
+   "Badge from truth. Set the badge to the server unread total, never add one."
+  ],
+  "takeaway": "Same id, one notification. The server sets the badge.",
+  "teaser": "Tomorrow: a new series. Analytics. Event schema and naming.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "3 buzzes.",
+    "1 message."
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "LOCK SCREEN",
+     "tag": {
+      "text": "DUPLICATES",
+      "tone": "red",
+      "cue": "three buzzes",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "push 1",
+         "cue": "one message"
+        },
+        {
+         "text": "push 2",
+         "cue": "three buzzes",
+         "dt": 0.2
+        },
+        {
+         "text": "push 3",
+         "cue": "stop duplicate",
+         "dt": 0.1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design notification dedupe",
+       "tone": "blue",
+       "size": 36,
+       "cue": "design notification dedupe"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "show all"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE PUSH",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "show(",
+         ""
+        ],
+        [
+         "every push",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "every push as it arrives"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "retries repeat it",
+         "tone": "red",
+         "cue": "retries"
+        },
+        {
+         "icon": "x",
+         "text": "devices repeat it",
+         "tone": "red",
+         "cue": "extra devices"
+        },
+        {
+         "icon": "x",
+         "text": "badge drifts",
+         "tone": "red",
+         "cue": "badge drifts"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Stable",
+    "id"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "PUSH PAYLOAD",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "id =",
+       "items": [
+        {
+         "text": "msg_8f3a",
+         "cue": "one id"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.85,
+     "items": [
+      {
+       "text": "retry = same push",
+       "tone": "green",
+       "size": 40,
+       "cue": "same notification",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "not new",
+       "tone": "amber",
+       "size": 36,
+       "cue": "every message"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Collapse",
+    "key"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "TRAY",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "key =",
+       "items": [
+        {
+         "text": "chat_id",
+         "cue": "per chat"
+        },
+        {
+         "text": "replace",
+         "cue": "replace the old one"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "x",
+       "text": "not stacked",
+       "tone": "red",
+       "size": 38,
+       "cue": "show one",
+       "tag": {
+        "text": "one per chat",
+        "tone": "green",
+        "cue": "one notification",
+        "sfx": "bell"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Seen",
+    "set"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Store handled ids",
+       "cue": "stores handled ids"
+      },
+      {
+       "icon": "ok",
+       "text": "Check on arrival",
+       "cue": "repeat push"
+      },
+      {
+       "icon": "clock",
+       "text": "Repeat: drop it",
+       "tone": "amber",
+       "cue": "dropped"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Badge from",
+    "truth"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "SERVER",
+       "main": "unread total",
+       "cue": "server unread total",
+       "tag": {
+        "text": "source",
+        "tone": "blue",
+        "cue": "badge to"
+       }
+      },
+      {
+       "name": "DEVICE",
+       "main": "set, never add",
+       "dashed": true,
+       "cue": "never add one",
+       "tag": {
+        "text": "exact",
+        "tone": "green",
+        "cue": "never add",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Same id.",
+    "One alert."
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Same id",
+       "sub": "one notification",
+       "cue": "same id"
+      },
+      {
+       "icon": "ok",
+       "text": "Server",
+       "sub": "sets the badge",
+       "cue": "server sets the badge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: event",
+    "schema, naming"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "New series",
+       "cue": "new series",
+       "dt": 0.0
+      },
+      {
+       "text": "Analytics",
+       "cue": "analytics",
+       "dt": 0.0
+      },
+      {
+       "text": "Event schema",
+       "cue": "event schema",
+       "dt": 0.0
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 21: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Push dedupe, end to end",
+  "tag": "#20 DEDUPE",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "PUSH IN",
+    "rows": [
+     {
+      "text": "Alex a1",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "Alex a1",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Handler",
+    "titleSize": 44,
+    "sub": "stable id per message",
+    "chip": {
+     "text": "key: chat_id",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "cnt",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Seen ids",
+    "titleSize": 44,
+    "sub": "repeat: dropped"
+   },
+   {
+    "id": "db",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Tray",
+    "titleSize": 44,
+    "sub": "one per chat"
+   },
+   {
+    "id": "bdg",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Badge",
+    "titleSize": 46,
+    "sub": "server unread total",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "push",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "cnt",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "check",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "cnt",
+    "fromSide": "b",
+    "to": "db",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "new",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "db",
+    "fromSide": "b",
+    "to": "bdg",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "set",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "same id: one alert",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "badge +1: avoid",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "server total: exact",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Stable id",
+    "at": 0.7
+   },
+   {
+    "text": "Collapse key",
+    "at": 3.2
+   },
+   {
+    "text": "Seen set",
+    "at": 5.9
+   },
+   {
+    "text": "Badge from truth",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Notif",
+   "dedupe",
+   "counts."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "LOCK SCREEN",
+   "tag": {
+    "text": "DUPLICATES",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the strangest duplicate notification bug you have chased, and what finally fixed it?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #pushnotifications #chatapp #badgecount #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #PushNotifications #Messaging #Badges"
+ }
+}
