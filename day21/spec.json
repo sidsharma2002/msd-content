@@ -1,0 +1,628 @@
+{
+ "day": 21,
+ "topic": "Event schema and naming",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 1,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "Every team logs events. So why is half the data unusable?",
+  "question": "Design an analytics event schema and naming.",
+  "trap": "The trap: log whatever each screen wants. Names drift, types change, and nobody can query it.",
+  "steps": [
+   "Naming rule. Use object then action, in past tense, like message sent.",
+   "Envelope. Every event carries the same fields: name, id, time, user, session, and version.",
+   "Typed properties. Each event has a typed contract. Use enums, not free text. No personal data.",
+   "Registry. Keep a tracking plan in code. Generate event types, and fail the build on unknown events."
+  ],
+  "takeaway": "One naming rule, one envelope, one registry.",
+  "teaser": "Tomorrow: batching and flushing events.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Half the data",
+    "unusable."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "EVENT LOG",
+     "tag": {
+      "text": "UNUSABLE",
+      "tone": "red",
+      "cue": "unusable",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "signup",
+         "cue": "every team"
+        },
+        {
+         "text": "SignUp",
+         "cue": "logs events",
+         "dt": 0.1
+        },
+        {
+         "text": "sign_up",
+         "cue": "half the data",
+         "dt": 0.1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design an event schema",
+       "tone": "blue",
+       "size": 36,
+       "cue": "design an analytics event schema"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "log anything"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE LOGGING",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "log(",
+         ""
+        ],
+        [
+         "any name",
+         "hl"
+        ],
+        [
+         ", any fields)",
+         ""
+        ]
+       ],
+       "cue": "whatever each screen wants"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "names drift",
+         "tone": "red",
+         "cue": "names drift"
+        },
+        {
+         "icon": "x",
+         "text": "types change",
+         "tone": "red",
+         "cue": "types change"
+        },
+        {
+         "icon": "x",
+         "text": "cannot query it",
+         "tone": "red",
+         "cue": "query it"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Naming",
+    "rule"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "EVENT NAME",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "name =",
+       "items": [
+        {
+         "text": "object",
+         "cue": "object"
+        },
+        {
+         "text": "action",
+         "cue": "action"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.85,
+     "items": [
+      {
+       "text": "message_sent",
+       "tone": "green",
+       "size": 40,
+       "mono": true,
+       "cue": "like message sent",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "past tense",
+       "tone": "amber",
+       "size": 36,
+       "cue": "past tense"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Event",
+    "envelope"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "SAME FIELDS",
+     "items": [
+      {
+       "type": "tokens",
+       "items": [
+        {
+         "text": "name",
+         "cue": "name"
+        },
+        {
+         "text": "id",
+         "cue": "id"
+        },
+        {
+         "text": "time",
+         "cue": "time"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "user",
+       "tone": "ink",
+       "size": 36,
+       "cue": "user"
+      },
+      {
+       "text": "session",
+       "tone": "ink",
+       "size": 36,
+       "cue": "session"
+      },
+      {
+       "text": "version",
+       "tone": "blue",
+       "size": 36,
+       "cue": "version"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Typed",
+    "properties"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Typed contract",
+       "cue": "typed contract"
+      },
+      {
+       "icon": "ok",
+       "text": "Enums, not text",
+       "cue": "enums"
+      },
+      {
+       "icon": "x",
+       "text": "No personal data",
+       "tone": "red",
+       "cue": "personal data"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Tracking",
+    "registry"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "TRACKING PLAN",
+       "main": "one file in code",
+       "cue": "tracking plan",
+       "tag": {
+        "text": "source",
+        "tone": "blue",
+        "cue": "in code"
+       }
+      },
+      {
+       "name": "GENERATED",
+       "main": "event types",
+       "dashed": true,
+       "cue": "generate event types",
+       "tag": {
+        "text": "typed",
+        "tone": "green",
+        "cue": "event types",
+        "sfx": "ding"
+       }
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "unknown event: build fails",
+       "tone": "red",
+       "size": 34,
+       "cue": "fail the build",
+       "sfx": "bell"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "One rule.",
+    "One envelope.",
+    "One registry."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Naming",
+       "sub": "object_action",
+       "cue": "naming rule"
+      },
+      {
+       "icon": "ok",
+       "text": "Envelope",
+       "sub": "same fields",
+       "cue": "envelope"
+      },
+      {
+       "icon": "ok",
+       "text": "Registry",
+       "sub": "in code",
+       "cue": "registry"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: batch",
+    "and flush"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Batching",
+       "cue": "batching",
+       "dt": 0.0
+      },
+      {
+       "text": "Flushing",
+       "cue": "flushing",
+       "dt": 0.0
+      },
+      {
+       "text": "Events",
+       "cue": "events",
+       "dt": 0.0
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 22: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Event schema, end to end",
+  "tag": "#21 SCHEMA",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "SCREENS",
+    "rows": [
+     {
+      "text": "SignUp",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "sign_up",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "srv",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Tracker",
+    "titleSize": 44,
+    "sub": "name rule + envelope",
+    "chip": {
+     "text": "object_action",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "cnt",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Registry",
+    "titleSize": 44,
+    "sub": "unknown: rejected"
+   },
+   {
+    "id": "db",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Typed event",
+    "titleSize": 40,
+    "sub": "props checked"
+   },
+   {
+    "id": "bdg",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Pipeline",
+    "titleSize": 46,
+    "sub": "clean, queryable",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "log",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "r",
+    "to": "cnt",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "check",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "cnt",
+    "fromSide": "b",
+    "to": "db",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "ok",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "db",
+    "fromSide": "b",
+    "to": "bdg",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "send",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "one name style",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "free text: avoid",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "clean data: ok",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Naming rule",
+    "at": 0.7
+   },
+   {
+    "text": "Envelope",
+    "at": 3.2
+   },
+   {
+    "text": "Typed props",
+    "at": 5.9
+   },
+   {
+    "text": "Registry",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Analytics",
+   "event",
+   "schema."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "EVENT LOG",
+   "tag": {
+    "text": "MESSY",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the worst event naming mess you have inherited, and how did you clean it up?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #eventtracking #dataquality #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #EventTracking #DataQuality"
+ }
+}
