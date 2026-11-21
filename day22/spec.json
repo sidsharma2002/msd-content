@@ -1,0 +1,135 @@
+{
+ "day": 22,
+ "topic": "Batching and flushing events",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 2,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "One network call per tap drains the battery. Batch your events instead.",
+  "question": "Design event batching and flushing.",
+  "trap": "The trap: send every event the moment it happens. It wakes the radio, burns battery, and loses events on a crash.",
+  "steps": [
+   "Buffer. Append each event to a small queue, and write it to disk. Never one request per event.",
+   "Flush triggers. Flush on batch size, on a timer, and when the app goes to background. Whichever comes first.",
+   "Send. Compress the batch and give it an id. Retry with backoff, and the server drops duplicates.",
+   "Delete late. Remove events from disk only after the server confirms. A crash then loses nothing."
+  ],
+  "takeaway": "Buffer on disk, flush on triggers, delete only after the confirm.",
+  "teaser": "Tomorrow: the offline event queue.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": ["One call", "per tap."], "titleSize": 110,
+   "blocks": [
+    {"type": "panel", "label": "NETWORK LOG", "tag": {"text": "BATTERY DRAIN", "tone": "red", "cue": "drains the battery", "sfx": "bell"},
+     "items": [{"type": "cells", "items": [{"text": "tap", "cue": "one network call"}, {"text": "tap", "cue": "per tap", "dt": 0.1}, {"text": "tap", "cue": "per tap", "dt": 0.3}]}]},
+    {"type": "pills", "items": [{"text": "Design event batching", "tone": "blue", "size": 38, "cue": "design event batching"}]}
+   ]
+  },
+  {
+   "title": ["The trap:", "send each one"], "titleSize": 104,
+   "blocks": [
+    {"type": "panel", "label": "NAIVE SENDER", "items": [
+     {"type": "code", "parts": [["on event: ", ""], ["post(", "hl"], ["event)", ""]], "cue": "the moment it happens"},
+     {"type": "rows", "items": [
+      {"icon": "x", "text": "wakes the radio", "tone": "red", "cue": "wakes the radio"},
+      {"icon": "x", "text": "burns battery", "tone": "red", "cue": "burns battery"},
+      {"icon": "x", "text": "lost on crash", "tone": "red", "cue": "on a crash"}]}]},
+    {"type": "pills", "width": 0.55, "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}]}
+   ]
+  },
+  {
+   "title": ["Buffer", "first"], "titleSize": 120,
+   "blocks": [
+    {"type": "panel", "label": "EVENT QUEUE", "items": [{"type": "tokens", "lead": "queue =", "items": [{"text": "e1", "cue": "append"}, {"text": "e2", "cue": "small queue", "dt": 0.2}, {"text": "e3", "cue": "small queue", "dt": 0.5}]}]},
+    {"type": "pills", "width": 0.8, "items": [{"text": "write to disk", "tone": "green", "size": 40, "cue": "write it to disk", "sfx": "ding"}]},
+    {"type": "pills", "items": [{"text": "never 1 per event", "tone": "red", "size": 36, "cue": "never one request"}]}
+   ]
+  },
+  {
+   "title": ["Flush", "triggers"], "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "batch size", "sub": "for example 20", "cue": "batch size"},
+     {"icon": "clock", "text": "timer", "sub": "for example 30 s", "cue": "on a timer"},
+     {"icon": "ok", "text": "app background", "cue": "goes to background"}]},
+    {"type": "pills", "h": 80, "items": [{"text": "first one wins", "tone": "blue", "size": 40, "cue": "whichever comes first"}]}
+   ]
+  },
+  {
+   "title": ["Send the", "batch"], "titleSize": 120,
+   "blocks": [
+    {"type": "tiers", "items": [
+     {"name": "BATCH", "main": "compressed + id", "cue": "compress the batch", "tag": {"text": "gzip", "tone": "blue", "cue": "compress"}},
+     {"name": "SERVER", "main": "drops duplicates", "dashed": true, "cue": "drops duplicates", "tag": {"text": "dedupe", "tone": "green", "cue": "drops duplicates", "sfx": "ding"}}]},
+    {"type": "pills", "items": [{"text": "retry with backoff", "tone": "amber", "size": 36, "cue": "retry with backoff"}]}
+   ]
+  },
+  {
+   "title": ["Delete", "late"], "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "server confirms", "cue": "server confirms"},
+     {"icon": "ok", "text": "then delete", "cue": "remove events"},
+     {"icon": "x", "text": "never before ack", "tone": "red", "size": 38, "cue": "a crash then", "tag": {"text": "data loss", "tone": "red", "cue": "loses nothing", "sfx": "bell"}}]}
+   ]
+  },
+  {
+   "title": ["Buffer on disk.", "Flush on timer.", "Delete on ack."], "titleSize": 96,
+   "blocks": [
+    {"type": "rows", "h": 112, "items": [
+     {"icon": "ok", "text": "Buffer", "sub": "on disk", "cue": "buffer on disk"},
+     {"icon": "ok", "text": "Flush", "sub": "on triggers", "cue": "flush on triggers"},
+     {"icon": "ok", "text": "Delete", "sub": "after confirm", "cue": "only after the confirm"}]}
+   ]
+  },
+  {
+   "title": ["Next: offline", "event queue"],
+   "blocks": [
+    {"type": "rows", "items": [
+     {"text": "Offline", "cue": "offline"},
+     {"text": "Event", "cue": "event"},
+     {"text": "Queue", "cue": "queue"}]},
+    {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+    {"type": "pills", "h": 56, "items": [{"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"}, {"text": "Day 23: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}]}
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Batching, end to end", "tag": "#22 BATCHING",
+  "boxes": [
+   {"id": "app", "x": 80, "y": 300, "w": 300, "h": 260, "title": "APP", "rows": [{"text": "event A", "at": 0.4, "grad": 0}, {"text": "event B", "at": 0.6, "grad": 3}]},
+   {"id": "buf", "x": 510, "y": 320, "w": 340, "h": 160, "title": "Disk buffer", "titleSize": 44, "sub": "append only", "chip": {"text": "size / timer / bg", "at": 1.6}},
+   {"id": "snd", "x": 1000, "y": 240, "w": 340, "h": 130, "title": "Sender", "titleSize": 44, "sub": "gzip + batch id"},
+   {"id": "srv", "x": 1000, "y": 430, "w": 340, "h": 130, "title": "Server", "titleSize": 44, "sub": "drops duplicates"},
+   {"id": "del", "x": 560, "y": 610, "w": 300, "h": 150, "title": "Delete", "titleSize": 46, "sub": "after confirm", "dashed": true, "tone": "blue"}
+  ],
+  "arrows": [
+   {"from": "app", "fromSide": "r", "to": "buf", "toSide": "l", "at": 0.9, "label": {"text": "append", "x": 388, "y": 364, "w": 100}},
+   {"from": "buf", "fromSide": "r", "to": "snd", "toSide": "l", "at": 3.4, "mid": 905, "label": {"text": "flush", "x": 915, "y": 330, "w": 80}},
+   {"from": "snd", "fromSide": "b", "to": "srv", "toSide": "t", "at": 4.4, "dur": 0.4, "label": {"text": "send", "x": 1182, "y": 384, "w": 110}},
+   {"from": "srv", "fromSide": "b", "to": "del", "toSide": "r", "at": 6.1, "tone": "green", "label": {"text": "ack", "x": 896, "y": 650, "w": 100}},
+   {"pts": [[1000, 500], [930, 500], [930, 560], [700, 560], [700, 606]], "dir": "d", "at": 8.6, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "no ack: keep it", "x": 720, "y": 566, "w": 280}}
+  ],
+  "chips": [
+   {"text": "one call, many events", "x": 530, "y": 496, "w": 300, "tone": "green", "at": 2.3},
+   {"text": "delete early: loss", "x": 560, "y": 776, "w": 300, "tone": "redsoft", "at": 7.0},
+   {"text": "delete on ack: ok", "x": 560, "y": 828, "w": 300, "tone": "green", "at": 7.6}
+  ],
+  "steps": [{"text": "Buffer on disk", "at": 0.7}, {"text": "Flush triggers", "at": 3.2}, {"text": "Send the batch", "at": 5.9}, {"text": "Delete after ack", "at": 8.2}]
+ },
+ "cover": {
+  "lines": ["Batch your", "analytics", "events."],
+  "card": {"type": "panel", "label": "NETWORK LOG", "tag": {"text": "ONE PER TAP", "tone": "red"},
+   "items": [{"type": "grid", "cols": 4, "rows": 1, "tileH": 96, "at0": 0, "step": 0}, {"type": "meter", "from": 0, "to": 0.01}]}
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what flush interval and batch size did you settle on in production, and what made you change them?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #batching #batterylife #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #Batching #MobilePerformance"
+ }
+}
