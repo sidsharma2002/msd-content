@@ -1,0 +1,629 @@
+{
+ "day": 23,
+ "topic": "Offline event queue",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 3,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "A user taps ten times on a flight. Analytics must not lose a single tap.",
+  "question": "Design an offline event queue.",
+  "trap": "The trap: keep events in memory. A crash or a kill loses them all.",
+  "steps": [
+   "Persist first. Write every event to a local database with a sequence number.",
+   "Drain in order. When the network returns, send the oldest events first, and stop at the first failure.",
+   "Bound the queue. Cap its size and age. When full, drop the least important events first.",
+   "Replay safely. Give each event an id and its original timestamp. The server drops duplicates and corrects clock skew."
+  ],
+  "takeaway": "Persist first, drain in order, cap it, replay idempotently.",
+  "teaser": "Tomorrow: session and identity stitching.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Ten taps,",
+    "no signal."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "AIRPLANE MODE",
+     "tag": {
+      "text": "EVENTS LOST",
+      "tone": "red",
+      "cue": "lose a single tap",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "tap",
+         "cue": "taps ten times"
+        },
+        {
+         "text": "tap",
+         "cue": "ten times",
+         "dt": 0.2
+        },
+        {
+         "text": "tap",
+         "cue": "ten times",
+         "dt": 0.4
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design an offline queue",
+       "tone": "blue",
+       "size": 38,
+       "cue": "design an offline event queue"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "memory only"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE QUEUE",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "queue = ",
+         ""
+        ],
+        [
+         "[]",
+         "hl"
+        ],
+        [
+         " // in memory",
+         ""
+        ]
+       ],
+       "cue": "keep events in memory"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "lost on kill",
+         "tone": "red",
+         "cue": "a crash or a kill"
+        },
+        {
+         "icon": "x",
+         "text": "silent drops",
+         "tone": "red",
+         "cue": "loses them all"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Persist",
+    "first"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "LOCAL DATABASE",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "seq =",
+       "items": [
+        {
+         "text": "1",
+         "cue": "local database"
+        },
+        {
+         "text": "2",
+         "cue": "sequence number",
+         "dt": 0.1
+        },
+        {
+         "text": "3",
+         "cue": "sequence number",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.8,
+     "items": [
+      {
+       "text": "write before send",
+       "tone": "green",
+       "size": 40,
+       "cue": "write every event",
+       "sfx": "ding"
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "memory = cache",
+       "tone": "red",
+       "size": 38,
+       "cue": "local database"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Drain",
+    "in order"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "clock",
+       "text": "network returns",
+       "cue": "network returns"
+      },
+      {
+       "icon": "ok",
+       "text": "oldest first",
+       "sub": "small batches",
+       "cue": "oldest events first"
+      },
+      {
+       "icon": "x",
+       "text": "stop on failure",
+       "tone": "red",
+       "cue": "first failure"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Bound the",
+    "queue"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "cap size",
+       "sub": "for example 5000",
+       "cue": "cap its size"
+      },
+      {
+       "icon": "clock",
+       "text": "cap age",
+       "sub": "for example 7 days",
+       "cue": "and age"
+      },
+      {
+       "icon": "ok",
+       "text": "keep critical",
+       "cue": "when full",
+       "tag": {
+        "text": "drop noise first",
+        "tone": "amber",
+        "cue": "least important",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Replay",
+    "safely"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "EVENT",
+       "main": "id + original time",
+       "cue": "original timestamp",
+       "tag": {
+        "text": "stable id",
+        "tone": "blue",
+        "cue": "event an id"
+       }
+      },
+      {
+       "name": "SERVER",
+       "main": "dedupe + fix skew",
+       "dashed": true,
+       "cue": "drops duplicates",
+       "tag": {
+        "text": "idempotent",
+        "tone": "green",
+        "cue": "corrects clock skew",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Persist. Drain.",
+    "Cap. Replay."
+   ],
+   "titleSize": 100,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Persist",
+       "sub": "before anything",
+       "cue": "persist first"
+      },
+      {
+       "icon": "ok",
+       "text": "Drain in order",
+       "sub": "stop on failure",
+       "cue": "drain in order"
+      },
+      {
+       "icon": "ok",
+       "text": "Replay",
+       "sub": "idempotent",
+       "cue": "idempotently"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: session",
+    "and identity"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Session",
+       "cue": "session"
+      },
+      {
+       "text": "Identity",
+       "cue": "identity"
+      },
+      {
+       "text": "Stitching",
+       "cue": "stitching"
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 24: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Offline queue, end to end",
+  "tag": "#23 QUEUE",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "APP",
+    "rows": [
+     {
+      "text": "event A",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "event B",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "db",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Local DB",
+    "titleSize": 44,
+    "sub": "seq + id + time",
+    "chip": {
+     "text": "survives kill",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "snd",
+    "x": 1000,
+    "y": 240,
+    "w": 340,
+    "h": 130,
+    "title": "Drainer",
+    "titleSize": 44,
+    "sub": "oldest first"
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 430,
+    "w": 340,
+    "h": 130,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "dedupe + skew fix"
+   },
+   {
+    "id": "del",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Remove",
+    "titleSize": 46,
+    "sub": "after ack",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "db",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "persist",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "db",
+    "fromSide": "r",
+    "to": "snd",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 905,
+    "label": {
+     "text": "online",
+     "x": 915,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "snd",
+    "fromSide": "b",
+    "to": "srv",
+    "toSide": "t",
+    "at": 4.4,
+    "dur": 0.4,
+    "label": {
+     "text": "replay",
+     "x": 1182,
+     "y": 384,
+     "w": 110
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "del",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "ack",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      1000,
+      500
+     ],
+     [
+      930,
+      500
+     ],
+     [
+      930,
+      560
+     ],
+     [
+      700,
+      560
+     ],
+     [
+      700,
+      606
+     ]
+    ],
+    "dir": "d",
+    "at": 8.6,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "failed: stop, retry",
+     "x": 720,
+     "y": 566,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "offline: keep queuing",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "memory only: lost",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "disk + ack: safe",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Persist first",
+    "at": 0.7
+   },
+   {
+    "text": "Drain in order",
+    "at": 3.2
+   },
+   {
+    "text": "Bound the queue",
+    "at": 5.9
+   },
+   {
+    "text": "Replay safely",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Offline",
+   "analytics",
+   "queue."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "AIRPLANE MODE",
+   "tag": {
+    "text": "NO SIGNAL",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the oldest event you ever found in an offline queue, and how did it break your dashboards?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #offlinefirst #eventqueue #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #OfflineFirst #EventQueue"
+ }
+}
