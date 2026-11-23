@@ -1,0 +1,579 @@
+{
+ "day": 24,
+ "topic": "Session and identity stitching",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 4,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "A user logs in on a new phone. Analytics must still know it is the same person.",
+  "question": "Design session and identity stitching.",
+  "trap": "The trap: use the device id as the user. Reinstalls and second phones become strangers.",
+  "steps": [
+   "Anonymous first. Give every install a random id, and tag each event with it before login.",
+   "Sessions on the client. A new session starts after thirty minutes of inactivity, with its own id.",
+   "Stitch on login. Send one identify event that links the anonymous id to the user id.",
+   "Merge on the server. Rewrite past events under the user id, and keep the link table for late events."
+  ],
+  "takeaway": "Anonymous id first, session by timeout, stitch on login, merge on the server.",
+  "teaser": "Tomorrow: sampling and rate limits.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Same user,",
+    "new phone."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NEW PHONE",
+     "tag": {
+      "text": "TWO USERS?",
+      "tone": "red",
+      "cue": "same person",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "phone A",
+         "cue": "logs in"
+        },
+        {
+         "text": "phone B",
+         "cue": "new phone",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design identity stitching",
+       "tone": "blue",
+       "size": 36,
+       "cue": "design session and identity stitching"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "device id"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE IDENTITY",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "user = ",
+         ""
+        ],
+        [
+         "device_id",
+         "hl"
+        ]
+       ],
+       "cue": "use the device id"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "reinstall = stranger",
+         "tone": "red",
+         "cue": "reinstalls"
+        },
+        {
+         "icon": "x",
+         "text": "two phones = two users",
+         "tone": "red",
+         "cue": "second phones"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Anonymous",
+    "first"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "BEFORE LOGIN",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "anon =",
+       "items": [
+        {
+         "text": "a1f3",
+         "cue": "random id"
+        },
+        {
+         "text": "a1f3",
+         "cue": "each event",
+         "dt": 0.1
+        },
+        {
+         "text": "a1f3",
+         "cue": "before login",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.8,
+     "items": [
+      {
+       "text": "tag every event",
+       "tone": "green",
+       "size": 40,
+       "cue": "tag each event",
+       "sfx": "ding"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Sessions on",
+    "the client"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "start on open",
+       "cue": "a new session starts"
+      },
+      {
+       "icon": "clock",
+       "text": "30 min idle",
+       "sub": "ends the session",
+       "cue": "thirty minutes of inactivity"
+      },
+      {
+       "icon": "ok",
+       "text": "own session id",
+       "tone": "green",
+       "cue": "its own id"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Stitch",
+    "on login"
+   ],
+   "titleSize": 120,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "ANONYMOUS ID",
+       "main": "a1f3",
+       "cue": "identify event",
+       "tag": {
+        "text": "before",
+        "tone": "blue",
+        "cue": "one identify"
+       }
+      },
+      {
+       "name": "USER ID",
+       "main": "u_42",
+       "dashed": true,
+       "cue": "links the anonymous id",
+       "tag": {
+        "text": "linked",
+        "tone": "green",
+        "cue": "to the user id",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Merge on",
+    "the server"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "rewrite history",
+       "sub": "by user id",
+       "cue": "rewrite past events"
+      },
+      {
+       "icon": "ok",
+       "text": "keep link table",
+       "cue": "link table",
+       "tag": {
+        "text": "late events",
+        "tone": "amber",
+        "cue": "late events",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Anon. Session.",
+    "Stitch. Merge."
+   ],
+   "titleSize": 100,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Anonymous id",
+       "sub": "first",
+       "cue": "anonymous id first"
+      },
+      {
+       "icon": "ok",
+       "text": "Session by timeout",
+       "cue": "session by timeout"
+      },
+      {
+       "icon": "ok",
+       "text": "Stitch + merge",
+       "sub": "server side",
+       "cue": "stitch on login"
+      }
+     ],
+     "h": 112
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: sampling",
+    "and limits"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Sampling",
+       "cue": "sampling"
+      },
+      {
+       "text": "Rate limits",
+       "cue": "rate limits"
+      },
+      {
+       "text": "Cost control",
+       "cue": "rate limits",
+       "dt": 0.5
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 25: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Identity, end to end",
+  "tag": "#24 IDENTITY",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "APP",
+    "rows": [
+     {
+      "text": "anon a1f3",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "session s9",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "id",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Identify",
+    "titleSize": 44,
+    "sub": "anon + user id",
+    "chip": {
+     "text": "on login",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 150,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "link table"
+   },
+   {
+    "id": "mrg",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Merge",
+    "titleSize": 46,
+    "sub": "one user",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "id",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "login",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "id",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 925,
+    "label": {
+     "text": "link",
+     "x": 895,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "mrg",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "merge",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      1000,
+      420
+     ],
+     [
+      930,
+      420
+     ],
+     [
+      930,
+      560
+     ],
+     [
+      700,
+      560
+     ],
+     [
+      700,
+      606
+     ]
+    ],
+    "dir": "d",
+    "at": 8.6,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "late event: look up",
+     "x": 720,
+     "y": 566,
+     "w": 280
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "anonymous: keep id",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "device id only: split",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "stitched: one user",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Anonymous first",
+    "at": 0.7
+   },
+   {
+    "text": "Sessions on client",
+    "at": 3.2
+   },
+   {
+    "text": "Stitch on login",
+    "at": 5.9
+   },
+   {
+    "text": "Merge on server",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Identity",
+   "stitching",
+   "explained."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "NEW PHONE",
+   "tag": {
+    "text": "SAME USER?",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the messiest identity merge you have had to clean up in an analytics pipeline?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #identity #sessions #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #Identity #Sessions"
+ }
+}
