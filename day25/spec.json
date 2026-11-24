@@ -1,0 +1,141 @@
+{
+ "day": 25,
+ "topic": "Sampling and rate limits",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 5,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "Millions of users fire events nonstop. Keep the numbers honest without sending everything.",
+  "question": "Design sampling and rate limits for analytics.",
+  "trap": "The trap: drop random events. Funnels break, and nobody can scale the counts back up.",
+  "steps": [
+   "Sample per user. Hash the user id, and keep or drop all of that user's events together.",
+   "Sample by event class. Always keep purchases and crashes, and sample the noisy taps and scrolls.",
+   "Stamp the rate. Attach the sample rate to every kept event, so the server can scale counts back up.",
+   "Cap the bursts. A token bucket on the device limits sending, and the server answers with a retry after."
+  ],
+  "takeaway": "Hash by user, sample by class, stamp the rate, cap with a bucket.",
+  "teaser": "Tomorrow: consent and PII handling.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": ["Too many", "events."], "titleSize": 110,
+   "blocks": [
+    {"type": "panel", "label": "EVENT FIREHOSE",
+     "tag": {"text": "TOO LOUD", "tone": "red", "cue": "nonstop", "sfx": "bell"},
+     "items": [{"type": "cells", "items": [{"text": "every tap", "cue": "fire events"}, {"text": "every scroll", "cue": "nonstop", "dt": 0.2}]}]},
+    {"type": "pills", "items": [{"text": "Design sampling + limits", "tone": "blue", "size": 36, "cue": "design sampling and rate limits"}]}
+   ]
+  },
+  {
+   "title": ["The trap:", "random drop"], "titleSize": 110,
+   "blocks": [
+    {"type": "panel", "label": "NAIVE SAMPLING",
+     "items": [
+      {"type": "code", "parts": [["if random() < 0.1: ", ""], ["send()", "hl"]], "cue": "drop random events"},
+      {"type": "rows", "items": [
+       {"icon": "x", "text": "funnels break", "tone": "red", "cue": "funnels break"},
+       {"icon": "x", "text": "counts unscalable", "tone": "red", "cue": "scale the counts"}]}
+     ]},
+    {"type": "pills", "width": 0.55, "items": [{"text": "4 steps", "tone": "blue", "size": 42, "cue": "four steps"}]}
+   ]
+  },
+  {
+   "title": ["Sample", "per user"], "titleSize": 120,
+   "blocks": [
+    {"type": "panel", "label": "HASH THE USER",
+     "items": [{"type": "tokens", "lead": "hash <", "items": [{"text": "keep", "cue": "keep or drop"}, {"text": "all", "cue": "all of that", "dt": 0.1}, {"text": "events", "cue": "events together", "dt": 0.2}]}]},
+    {"type": "pills", "width": 0.8, "items": [{"text": "same user, same fate", "tone": "green", "size": 38, "cue": "hash the user id", "sfx": "ding"}]}
+   ]
+  },
+  {
+   "title": ["Sample", "by class"], "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "purchase", "sub": "keep all", "tone": "green", "cue": "purchases"},
+     {"icon": "ok", "text": "crash", "sub": "keep all", "tone": "green", "cue": "crashes"},
+     {"icon": "clock", "text": "taps, scrolls", "sub": "sample", "cue": "noisy taps"}]}
+   ]
+  },
+  {
+   "title": ["Stamp", "the rate"], "titleSize": 120,
+   "blocks": [
+    {"type": "tiers", "items": [
+     {"name": "EVENT", "main": "tap  rate 0.1", "cue": "attach the sample rate", "tag": {"text": "stamped", "tone": "blue", "cue": "every kept event"}},
+     {"name": "SERVER", "main": "count x 10", "dashed": true, "cue": "scale counts back", "tag": {"text": "true count", "tone": "green", "cue": "back up", "sfx": "ding"}}]}
+   ]
+  },
+  {
+   "title": ["Cap the", "bursts"], "titleSize": 120,
+   "blocks": [
+    {"type": "rows", "items": [
+     {"icon": "ok", "text": "token bucket", "sub": "on the device", "cue": "token bucket"},
+     {"icon": "clock", "text": "retry after", "sub": "from server", "cue": "retry after", "tag": {"text": "429", "tone": "amber", "cue": "answers", "sfx": "ding"}}]}
+   ]
+  },
+  {
+   "title": ["Hash. Class.", "Stamp. Cap."], "titleSize": 100,
+   "blocks": [
+    {"type": "rows", "h": 112, "items": [
+     {"icon": "ok", "text": "Hash by user", "cue": "hash by user"},
+     {"icon": "ok", "text": "Sample by class", "cue": "sample by class"},
+     {"icon": "ok", "text": "Stamp + cap", "sub": "scale back up", "cue": "stamp the rate"}]}
+   ]
+  },
+  {
+   "title": ["Next: consent", "and PII"],
+   "blocks": [
+    {"type": "rows", "items": [
+     {"text": "Consent", "cue": "consent"},
+     {"text": "PII handling", "cue": "PII"},
+     {"text": "Data deletion", "cue": "PII", "dt": 0.5}]},
+    {"type": "cta", "text": "Comment MSD", "icon": "bubble", "cue": "comment", "sfx": "sparkle"},
+    {"type": "pills", "h": 56, "items": [
+     {"text": "free cheatsheet", "tone": "outline", "size": 30, "cue": "free cheatsheet"},
+     {"text": "Day 26: tomorrow", "tone": "white", "size": 30, "cue": "free cheatsheet", "dt": 0.4}]}
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Sampling, end to end",
+  "tag": "#25 SAMPLING",
+  "boxes": [
+   {"id": "app", "x": 80, "y": 300, "w": 300, "h": 260, "title": "APP",
+    "rows": [{"text": "tap", "at": 0.4, "grad": 0}, {"text": "purchase", "at": 0.6, "grad": 3}]},
+   {"id": "smp", "x": 510, "y": 320, "w": 340, "h": 160, "title": "Sampler", "titleSize": 44, "sub": "hash(user)", "chip": {"text": "rate 0.1", "at": 1.6}},
+   {"id": "srv", "x": 1000, "y": 300, "w": 340, "h": 150, "title": "Server", "titleSize": 44, "sub": "scales counts"},
+   {"id": "bkt", "x": 560, "y": 610, "w": 300, "h": 150, "title": "Bucket", "titleSize": 46, "sub": "retry after", "dashed": true, "tone": "blue"}
+  ],
+  "arrows": [
+   {"from": "app", "fromSide": "r", "to": "smp", "toSide": "l", "at": 0.9, "label": {"text": "events", "x": 388, "y": 364, "w": 100}},
+   {"from": "smp", "fromSide": "r", "to": "srv", "toSide": "l", "at": 3.4, "mid": 925, "label": {"text": "kept", "x": 895, "y": 330, "w": 80}},
+   {"from": "srv", "fromSide": "b", "to": "bkt", "toSide": "r", "at": 6.1, "tone": "green", "label": {"text": "limit", "x": 896, "y": 650, "w": 100}},
+   {"pts": [[1000, 420], [930, 420], [930, 560], [700, 560], [700, 606]], "dir": "d", "at": 8.6, "dur": 0.9, "tone": "red", "dashed": true, "label": {"text": "burst: back off", "x": 720, "y": 566, "w": 280}}
+  ],
+  "chips": [
+   {"text": "purchase: always kept", "x": 530, "y": 496, "w": 300, "tone": "green", "at": 2.3},
+   {"text": "random drop: broken", "x": 560, "y": 776, "w": 300, "tone": "redsoft", "at": 7.0},
+   {"text": "stamped: true counts", "x": 560, "y": 828, "w": 300, "tone": "green", "at": 7.6}
+  ],
+  "steps": [
+   {"text": "Sample per user", "at": 0.7},
+   {"text": "Sample by class", "at": 3.2},
+   {"text": "Stamp the rate", "at": 5.9},
+   {"text": "Cap the bursts", "at": 8.2}
+  ]
+ },
+ "cover": {
+  "lines": ["Sampling", "and limits", "explained."],
+  "card": {"type": "panel", "label": "EVENTS", "tag": {"text": "TOO MANY", "tone": "red"},
+   "items": [{"type": "grid", "cols": 4, "rows": 1, "tileH": 96, "at0": 0, "step": 0}, {"type": "meter", "from": 0, "to": 0.01}]}
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the worst number you ever trusted from a sampled dataset?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #sampling #ratelimiting #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #Sampling #RateLimiting"
+ }
+}
