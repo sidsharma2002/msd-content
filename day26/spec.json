@@ -1,0 +1,567 @@
+{
+ "day": 26,
+ "topic": "Consent and PII handling",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 6,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "A user says no to tracking, and your app still sends their email.",
+  "question": "Design consent and PII handling for mobile analytics.",
+  "trap": "The trap: collect everything, filter on the server later. The data already left the device.",
+  "steps": [
+   "Gate at the source. Store consent on the device, and check it before any event is created.",
+   "Minimize the payload. No emails, phone numbers or exact locations. Use an allowlist of fields.",
+   "Pseudonymize the identity. Send a random id, and keep the mapping on the server, behind access control.",
+   "Honor withdrawal. Stop collecting, clear the queue, and send a deletion request keyed by the id."
+  ],
+  "takeaway": "Gate at the source, allowlist fields, hash the identity, delete on withdrawal.",
+  "teaser": "Tomorrow: the crash reporting pipeline.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "User said",
+    "no."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "TRACKING OFF",
+     "tag": {
+      "text": "EMAIL SENT",
+      "tone": "red",
+      "cue": "still sends",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "consent: no",
+         "cue": "says no"
+        },
+        {
+         "text": "email: sent",
+         "cue": "their email",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design consent + PII",
+       "tone": "blue",
+       "size": 38,
+       "cue": "design consent and pii"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "filter later"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE PIPELINE",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "send(",
+         ""
+        ],
+        [
+         "everything",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "collect everything"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "data already left",
+         "tone": "red",
+         "cue": "already left"
+        },
+        {
+         "icon": "x",
+         "text": "consent not honored",
+         "tone": "red",
+         "cue": "left the device"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Gate at",
+    "the source"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "CONSENT",
+       "main": "stored on device",
+       "cue": "store consent",
+       "tag": {
+        "text": "check",
+        "tone": "blue",
+        "cue": "check it"
+       }
+      },
+      {
+       "name": "EVENT",
+       "main": "never created",
+       "dashed": true,
+       "cue": "created",
+       "tag": {
+        "text": "blocked",
+        "tone": "green",
+        "cue": "created",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Minimize",
+    "payload"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "x",
+       "text": "email, phone",
+       "sub": "never in events",
+       "tone": "red",
+       "cue": "emails phone numbers"
+      },
+      {
+       "icon": "ok",
+       "text": "allowlist fields",
+       "sub": "known keys",
+       "tone": "green",
+       "cue": "allowlist"
+      },
+      {
+       "icon": "clock",
+       "text": "round the rest",
+       "sub": "coarse location",
+       "cue": "exact locations"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Pseudonymize",
+    "identity"
+   ],
+   "titleSize": 84,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "DEVICE",
+       "main": "random id",
+       "cue": "random id",
+       "tag": {
+        "text": "sent",
+        "tone": "blue",
+        "cue": "send a random"
+       }
+      },
+      {
+       "name": "SERVER",
+       "main": "mapping, locked",
+       "dashed": true,
+       "cue": "mapping",
+       "tag": {
+        "text": "restricted",
+        "tone": "green",
+        "cue": "access control",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Honor",
+    "withdrawal"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "stop collecting",
+       "cue": "stop collecting"
+      },
+      {
+       "icon": "ok",
+       "text": "clear the queue",
+       "cue": "clear the queue"
+      },
+      {
+       "icon": "clock",
+       "text": "delete asked",
+       "sub": "by id",
+       "cue": "deletion request",
+       "tag": {
+        "text": "server",
+        "tone": "amber",
+        "cue": "keyed by the id",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Gate. Allowlist.",
+    "Hash. Delete."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Gate at source",
+       "cue": "gate at the source"
+      },
+      {
+       "icon": "ok",
+       "text": "Allowlist fields",
+       "cue": "allowlist fields"
+      },
+      {
+       "icon": "ok",
+       "text": "Hash + delete",
+       "sub": "on withdrawal",
+       "cue": "hash the identity"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: crash",
+    "reporting"
+   ],
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Capture the crash",
+       "cue": "crash"
+      },
+      {
+       "text": "Upload on relaunch",
+       "cue": "pipeline",
+       "dt": 0.3
+      },
+      {
+       "text": "Symbolication",
+       "cue": "pipeline",
+       "dt": 0.7
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 27: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Consent, end to end",
+  "tag": "#26 CONSENT",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "APP",
+    "rows": [
+     {
+      "text": "tap",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "email",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "gate",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Consent gate",
+    "titleSize": 40,
+    "sub": "allowlist fields",
+    "chip": {
+     "text": "consent: yes",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 150,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "random id only"
+   },
+   {
+    "id": "del",
+    "x": 560,
+    "y": 610,
+    "w": 300,
+    "h": 150,
+    "title": "Deletion",
+    "titleSize": 46,
+    "sub": "keyed by id",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "gate",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "events",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "gate",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 925,
+    "label": {
+     "text": "clean",
+     "x": 895,
+     "y": 330,
+     "w": 80
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "del",
+    "toSide": "r",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "delete",
+     "x": 896,
+     "y": 650,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      700,
+      545
+     ],
+     [
+      700,
+      606
+     ]
+    ],
+    "dir": "d",
+    "at": 8.6,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "no consent: drop",
+     "x": 715,
+     "y": 556,
+     "w": 260
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "email: never sent",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "filter later: late",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "queue cleared",
+    "x": 560,
+    "y": 828,
+    "w": 300,
+    "tone": "green",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Gate at the source",
+    "at": 0.7
+   },
+   {
+    "text": "Minimize payload",
+    "at": 3.2
+   },
+   {
+    "text": "Random id only",
+    "at": 5.9
+   },
+   {
+    "text": "Delete on withdrawal",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Consent",
+   "and PII",
+   "explained."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "EVENTS",
+   "tag": {
+    "text": "EMAIL LEAK",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the most surprising piece of personal data you found in an analytics event?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #analytics #privacy #gdpr #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #Analytics #Privacy #DataProtection"
+ }
+}
