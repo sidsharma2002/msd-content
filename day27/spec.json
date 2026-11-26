@@ -1,0 +1,572 @@
+{
+ "day": 27,
+ "topic": "Crash reporting pipeline",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 7,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "Your app crashes for a thousand users, and you never hear about it.",
+  "question": "Design a crash reporting pipeline for a mobile app.",
+  "trap": "The trap: send the report from the crash handler. The process is dying, the network call fails, and the report is lost.",
+  "steps": [
+   "Capture safely. In the crash handler, only write a small report to disk. No network, no heavy work.",
+   "Upload on next launch. Find the saved report, send it in the background, and delete it after the server confirms.",
+   "Symbolicate on the server. Keep the mapping files for each build, and turn raw addresses into readable stack traces.",
+   "Group and alert. Hash the top frames into a fingerprint, count users per group, and alert on a spike after a release."
+  ],
+  "takeaway": "Write to disk, upload later, symbolicate on the server, group by fingerprint.",
+  "teaser": "Tomorrow: funnels and attribution events.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Crash.",
+    "No report."
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CRASHES",
+     "tag": {
+      "text": "NOT SEEN",
+      "tone": "red",
+      "cue": "never hear",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "crashed: 1000",
+         "cue": "thousand users"
+        },
+        {
+         "text": "reports: 0",
+         "cue": "never hear",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design crash reporting",
+       "tone": "blue",
+       "size": 38,
+       "cue": "crash reporting pipeline"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "send in handler"
+   ],
+   "titleSize": 100,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CRASH HANDLER",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "upload(",
+         ""
+        ],
+        [
+         "crash",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "send the report"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "process is dying",
+         "tone": "red",
+         "cue": "dying"
+        },
+        {
+         "icon": "x",
+         "text": "report is lost",
+         "tone": "red",
+         "cue": "report is lost"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Capture",
+    "safely"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "HANDLER",
+       "main": "tiny report",
+       "cue": "small report",
+       "tag": {
+        "text": "write",
+        "tone": "blue",
+        "cue": "to disk"
+       }
+      },
+      {
+       "name": "NETWORK",
+       "main": "not touched",
+       "dashed": true,
+       "cue": "no network",
+       "tag": {
+        "text": "safe",
+        "tone": "green",
+        "cue": "no heavy work",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Upload on",
+    "next launch"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "find saved report",
+       "cue": "find the saved report"
+      },
+      {
+       "icon": "clock",
+       "text": "send in background",
+       "cue": "in the background"
+      },
+      {
+       "icon": "ok",
+       "text": "delete on confirm",
+       "sub": "ack",
+       "cue": "server confirms",
+       "tag": {
+        "text": "ack",
+        "tone": "green",
+        "cue": "confirms",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Symbolicate",
+    "on server"
+   ],
+   "titleSize": 84,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "RAW TRACE",
+       "main": "0x1a2b3c",
+       "cue": "raw addresses",
+       "tag": {
+        "text": "unreadable",
+        "tone": "blue",
+        "cue": "raw addresses"
+       }
+      },
+      {
+       "name": "MAPPING",
+       "main": "per build, kept",
+       "dashed": true,
+       "cue": "mapping files",
+       "tag": {
+        "text": "readable",
+        "tone": "green",
+        "cue": "readable stack",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Group and",
+    "alert"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "hash top frames",
+       "sub": "fingerprint",
+       "cue": "hash the top frames"
+      },
+      {
+       "icon": "ok",
+       "text": "count users",
+       "sub": "per group",
+       "cue": "count users"
+      },
+      {
+       "icon": "x",
+       "text": "spike after release",
+       "tone": "red",
+       "cue": "spike after a release",
+       "tag": {
+        "text": "alert",
+        "tone": "red",
+        "cue": "alert on a spike",
+        "sfx": "bell"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Disk. Upload.",
+    "Group."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "Write to disk",
+       "cue": "write to disk"
+      },
+      {
+       "icon": "ok",
+       "text": "Upload later",
+       "cue": "upload later"
+      },
+      {
+       "icon": "ok",
+       "text": "Symbolicate, group",
+       "sub": "fingerprint",
+       "cue": "symbolicate on the server"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: funnels",
+    "and attribution"
+   ],
+   "titleSize": 84,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Funnel steps",
+       "cue": "funnels"
+      },
+      {
+       "text": "Attribution events",
+       "cue": "attribution",
+       "dt": 0.3
+      },
+      {
+       "text": "Dedupe installs",
+       "cue": "events",
+       "dt": 0.7
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 28: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Crash path, end to end",
+  "tag": "#27 CRASHES",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "APP",
+    "rows": [
+     {
+      "text": "crash",
+      "at": 0.4,
+      "grad": 3
+     },
+     {
+      "text": "report",
+      "at": 0.6,
+      "grad": 0
+     }
+    ]
+   },
+   {
+    "id": "disk",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Disk",
+    "titleSize": 44,
+    "sub": "small report",
+    "chip": {
+     "text": "saved",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 150,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "symbolicate"
+   },
+   {
+    "id": "grp",
+    "x": 1000,
+    "y": 610,
+    "w": 340,
+    "h": 150,
+    "title": "Groups",
+    "titleSize": 44,
+    "sub": "fingerprint",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "disk",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "write",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "disk",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 925,
+    "label": {
+     "text": "next launch",
+     "x": 860,
+     "y": 330,
+     "w": 130
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "grp",
+    "toSide": "t",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "group",
+     "x": 1180,
+     "y": 500,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      700,
+      545
+     ],
+     [
+      700,
+      606
+     ]
+    ],
+    "dir": "d",
+    "at": 8.6,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "upload in handler: lost",
+     "x": 715,
+     "y": 556,
+     "w": 300
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "no network at crash",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "report lost",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "spike alert",
+    "x": 1000,
+    "y": 776,
+    "w": 300,
+    "tone": "amber",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "Write to disk",
+    "at": 0.7
+   },
+   {
+    "text": "Upload next launch",
+    "at": 3.2
+   },
+   {
+    "text": "Symbolicate",
+    "at": 5.9
+   },
+   {
+    "text": "Group and alert",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Crash",
+   "reporting",
+   "explained."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CRASHES",
+   "tag": {
+    "text": "NOT SEEN",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the hardest crash you ever had to reproduce from a stack trace alone?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #crashreporting #crashlytics #observability #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #CrashReporting #Observability #MobileDev"
+ }
+}
