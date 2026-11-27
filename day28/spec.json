@@ -1,0 +1,581 @@
+{
+ "day": 28,
+ "topic": "Funnels and attribution events",
+ "tag": "ANALYTICS",
+ "series": "Analytics",
+ "part": 8,
+ "total": 10,
+ "style": "Calm, clear, confident, like a senior engineer explaining to a colleague. Steady pace.",
+ "script": {
+  "hook": "Your funnel says half the users drop at checkout, and the numbers are wrong.",
+  "question": "Design funnel and attribution events for a mobile app.",
+  "trap": "The trap: count raw events per screen. Retries double count, offline events arrive late, and the install source is lost.",
+  "steps": [
+   "One event per step. Give each step a stable name, fired once per attempt.",
+   "Carry the context. Every event holds the user id and session id, so steps join without guessing.",
+   "Attribution at install. Read the install referrer once, store source and campaign, and attach them later.",
+   "Dedupe on the server. An event id drops retries, and client time fixes the order."
+  ],
+  "takeaway": "One event per step, one id per journey, attribution saved at install.",
+  "teaser": "Tomorrow: experiment exposure logging.",
+  "cta": "Comment M S D for the free cheatsheet."
+ },
+ "nodes": [
+  {
+   "title": [
+    "Funnel says",
+    "wrong drop."
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "CHECKOUT FUNNEL",
+     "tag": {
+      "text": "WRONG NUMBERS",
+      "tone": "red",
+      "cue": "numbers are wrong",
+      "sfx": "bell"
+     },
+     "items": [
+      {
+       "type": "cells",
+       "items": [
+        {
+         "text": "cart: 1000",
+         "cue": "funnel says"
+        },
+        {
+         "text": "pay: 500",
+         "cue": "drop at checkout",
+         "dt": 0.2
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "items": [
+      {
+       "text": "Design funnel events",
+       "tone": "blue",
+       "size": 38,
+       "cue": "funnel and attribution events"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "The trap:",
+    "raw counts"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "NAIVE COUNT",
+     "items": [
+      {
+       "type": "code",
+       "parts": [
+        [
+         "count(",
+         ""
+        ],
+        [
+         "screen_view",
+         "hl"
+        ],
+        [
+         ")",
+         ""
+        ]
+       ],
+       "cue": "raw events per screen"
+      },
+      {
+       "type": "rows",
+       "items": [
+        {
+         "icon": "x",
+         "text": "retries double count",
+         "tone": "red",
+         "cue": "double count"
+        },
+        {
+         "icon": "x",
+         "text": "late offline events",
+         "tone": "red",
+         "cue": "arrive late"
+        },
+        {
+         "icon": "x",
+         "text": "install source lost",
+         "tone": "red",
+         "cue": "source is lost"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.55,
+     "items": [
+      {
+       "text": "4 steps",
+       "tone": "blue",
+       "size": 42,
+       "cue": "four steps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "One event",
+    "per step"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "FUNNEL EVENTS",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "step =",
+       "items": [
+        {
+         "text": "cart",
+         "cue": "stable name"
+        },
+        {
+         "text": "pay",
+         "cue": "once per attempt"
+        },
+        {
+         "text": "done",
+         "cue": "attempt"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pills",
+     "width": 0.78,
+     "items": [
+      {
+       "text": "1 step = 1 event",
+       "tone": "green",
+       "size": 40,
+       "cue": "once per attempt",
+       "sfx": "ding"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Carry the",
+    "context"
+   ],
+   "titleSize": 110,
+   "blocks": [
+    {
+     "type": "panel",
+     "label": "EVERY EVENT",
+     "items": [
+      {
+       "type": "tokens",
+       "lead": "ids =",
+       "items": [
+        {
+         "text": "user",
+         "cue": "user id"
+        },
+        {
+         "text": "session",
+         "cue": "session id"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "join steps",
+       "sub": "no guessing",
+       "cue": "steps join"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Attribution",
+    "at install"
+   ],
+   "titleSize": 96,
+   "blocks": [
+    {
+     "type": "tiers",
+     "items": [
+      {
+       "name": "INSTALL",
+       "main": "read referrer once",
+       "cue": "install referrer",
+       "tag": {
+        "text": "once",
+        "tone": "blue",
+        "cue": "once"
+       }
+      },
+      {
+       "name": "LATER EVENTS",
+       "main": "source + campaign",
+       "dashed": true,
+       "cue": "store source and campaign",
+       "tag": {
+        "text": "attached",
+        "tone": "green",
+        "cue": "attach them later",
+        "sfx": "ding"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Dedupe on",
+    "server"
+   ],
+   "titleSize": 104,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "icon": "ok",
+       "text": "event id",
+       "sub": "drop retries",
+       "cue": "event id drops retries"
+      },
+      {
+       "icon": "clock",
+       "text": "order by client time",
+       "cue": "client time"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "One step. One id.",
+    "Source at install."
+   ],
+   "titleSize": 84,
+   "blocks": [
+    {
+     "type": "rows",
+     "h": 112,
+     "items": [
+      {
+       "icon": "ok",
+       "text": "One event",
+       "sub": "per step",
+       "cue": "one event per step"
+      },
+      {
+       "icon": "ok",
+       "text": "One id",
+       "sub": "per journey",
+       "cue": "one id per journey"
+      },
+      {
+       "icon": "ok",
+       "text": "Source",
+       "sub": "saved at install",
+       "cue": "saved at install"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": [
+    "Next: experiment",
+    "exposure logging"
+   ],
+   "titleSize": 80,
+   "blocks": [
+    {
+     "type": "rows",
+     "items": [
+      {
+       "text": "Log on exposure",
+       "cue": "experiment"
+      },
+      {
+       "text": "Variant ids",
+       "cue": "exposure",
+       "dt": 0.3
+      },
+      {
+       "text": "No double logs",
+       "cue": "logging",
+       "dt": 0.7
+      }
+     ]
+    },
+    {
+     "type": "cta",
+     "text": "Comment MSD",
+     "icon": "bubble",
+     "cue": "comment",
+     "sfx": "sparkle"
+    },
+    {
+     "type": "pills",
+     "h": 56,
+     "items": [
+      {
+       "text": "free cheatsheet",
+       "tone": "outline",
+       "size": 30,
+       "cue": "free cheatsheet"
+      },
+      {
+       "text": "Day 29: tomorrow",
+       "tone": "white",
+       "size": 30,
+       "cue": "free cheatsheet",
+       "dt": 0.4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "flow": {
+  "title": "Funnel path, end to end",
+  "tag": "#28 FUNNELS",
+  "boxes": [
+   {
+    "id": "app",
+    "x": 80,
+    "y": 300,
+    "w": 300,
+    "h": 260,
+    "title": "APP",
+    "rows": [
+     {
+      "text": "cart",
+      "at": 0.4,
+      "grad": 0
+     },
+     {
+      "text": "pay",
+      "at": 0.6,
+      "grad": 3
+     }
+    ]
+   },
+   {
+    "id": "ctx",
+    "x": 510,
+    "y": 320,
+    "w": 340,
+    "h": 160,
+    "title": "Event",
+    "titleSize": 44,
+    "sub": "user + session id",
+    "chip": {
+     "text": "event id",
+     "at": 1.6
+    }
+   },
+   {
+    "id": "srv",
+    "x": 1000,
+    "y": 300,
+    "w": 340,
+    "h": 150,
+    "title": "Server",
+    "titleSize": 44,
+    "sub": "dedupe + order"
+   },
+   {
+    "id": "fun",
+    "x": 1000,
+    "y": 610,
+    "w": 340,
+    "h": 150,
+    "title": "Funnel",
+    "titleSize": 44,
+    "sub": "steps + source",
+    "dashed": true,
+    "tone": "blue"
+   }
+  ],
+  "arrows": [
+   {
+    "from": "app",
+    "fromSide": "r",
+    "to": "ctx",
+    "toSide": "l",
+    "at": 0.9,
+    "label": {
+     "text": "step",
+     "x": 388,
+     "y": 364,
+     "w": 100
+    }
+   },
+   {
+    "from": "ctx",
+    "fromSide": "r",
+    "to": "srv",
+    "toSide": "l",
+    "at": 3.4,
+    "mid": 925,
+    "label": {
+     "text": "send",
+     "x": 860,
+     "y": 330,
+     "w": 130
+    }
+   },
+   {
+    "from": "srv",
+    "fromSide": "b",
+    "to": "fun",
+    "toSide": "t",
+    "at": 6.1,
+    "tone": "green",
+    "label": {
+     "text": "join",
+     "x": 1180,
+     "y": 500,
+     "w": 100
+    }
+   },
+   {
+    "pts": [
+     [
+      700,
+      545
+     ],
+     [
+      700,
+      606
+     ]
+    ],
+    "dir": "d",
+    "at": 8.6,
+    "dur": 0.9,
+    "tone": "red",
+    "dashed": true,
+    "label": {
+     "text": "retry: double count",
+     "x": 715,
+     "y": 556,
+     "w": 300
+    }
+   }
+  ],
+  "chips": [
+   {
+    "text": "source from install",
+    "x": 530,
+    "y": 496,
+    "w": 300,
+    "tone": "green",
+    "at": 2.3
+   },
+   {
+    "text": "double count",
+    "x": 560,
+    "y": 776,
+    "w": 300,
+    "tone": "redsoft",
+    "at": 7.0
+   },
+   {
+    "text": "event id drops it",
+    "x": 1000,
+    "y": 776,
+    "w": 300,
+    "tone": "amber",
+    "at": 7.6
+   }
+  ],
+  "steps": [
+   {
+    "text": "One event per step",
+    "at": 0.7
+   },
+   {
+    "text": "Carry ids",
+    "at": 3.2
+   },
+   {
+    "text": "Attribution at install",
+    "at": 5.9
+   },
+   {
+    "text": "Dedupe on server",
+    "at": 8.2
+   }
+  ]
+ },
+ "cover": {
+  "lines": [
+   "Funnels,",
+   "events,",
+   "source."
+  ],
+  "card": {
+   "type": "panel",
+   "label": "CHECKOUT FUNNEL",
+   "tag": {
+    "text": "WRONG NUMBERS",
+    "tone": "red"
+   },
+   "items": [
+    {
+     "type": "grid",
+     "cols": 4,
+     "rows": 1,
+     "tileH": 96,
+     "at0": 0,
+     "step": 0
+    },
+    {
+     "type": "meter",
+     "from": 0,
+     "to": 0.01
+    }
+   ]
+  }
+ },
+ "social": {
+  "insta_cta": "Comment MSD for the free cheatsheet.",
+  "linkedin_cta": "Question for you: what is the worst analytics number you trusted before finding out it was double counted?",
+  "hashtags_insta": "#mobilesystemdesign #systemdesign #androiddev #iosdev #mobiledev #techinterview #funnels #attribution #mobileanalytics #interviewprep",
+  "hashtags_linkedin": "#MobileSystemDesign #SystemDesign #AndroidDev #iOSDev #SoftwareEngineering #TechInterviews #MobileAnalytics #Attribution #MobileDev"
+ }
+}
